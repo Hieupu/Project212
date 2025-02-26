@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,7 +40,9 @@ namespace Project212
 
             if (account != null)
             {
-                
+                Homepage homepage = new Homepage(account);
+                homepage.Show();
+                this.Close();
             }
             else
             {
