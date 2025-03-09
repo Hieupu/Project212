@@ -25,12 +25,16 @@ namespace Project212
         public Homepage(Account acc)
         {
             InitializeComponent();
+            //MessageBox.Show("Homepage opened!");
             account = acc;
             SetUserInterface(acc.Role);
         }
 
         private void SetUserInterface(string role)
         {
+            role = role.Trim(); // Xóa khoảng trắng thừa ở đầu và cuối
+
+            //MessageBox.Show($"Role after trim: '{role}'"); // Kiểm tra lại giá trị role
             if (role == "admin")
             {
                 AdminPanel.Visibility = Visibility.Visible;
@@ -66,14 +70,35 @@ namespace Project212
             }
         }
 
-        private void ButtonUSB_Click(object sender, RoutedEventArgs e)
+        //nút user information
+        private void UserInfor_Click(object sender, RoutedEventArgs e)
         {
-            ContainerUser.Child = new Timetable();
+            UserInformation userInfo = new UserInformation(account);
+            userInfo.Width = ContainerUser.ActualWidth;  // Gán kích thước theo container
+            userInfo.Height = ContainerUser.ActualHeight;
+
+            ContainerUser.Child = userInfo;
         }
 
+
+        
         private void TrackingAllFile(object sender, RoutedEventArgs e)
         {
-            ContainerUser.Child = new UserInformation();
+            ContainerUser.Child = new Timetable(); 
+        }
+
+        //nút Book
+        private void BookLich_Click(object sender, RoutedEventArgs e)
+        {
+            // Tạo một thể hiện của BookLich
+            BookLich bookLichControl = new BookLich();
+
+            // Thiết lập kích thước theo kích thước của ContainerUser
+            bookLichControl.Width = ContainerUser.ActualWidth;
+            bookLichControl.Height = ContainerUser.ActualHeight;
+
+            // Gán vào ContainerUser (giống cách bạn làm với UserInformation)
+            ContainerUser.Child = bookLichControl;
         }
     }
 }

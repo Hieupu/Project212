@@ -28,6 +28,7 @@ namespace Project212
 
             InitializeComponent();
             context = new Prn212AssignmentContext();
+           
         }
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
@@ -37,6 +38,8 @@ namespace Project212
 
             var account = context.Accounts
                                  .FirstOrDefault(a => a.Username == username && a.Password == password);
+            
+
 
             if (account != null)
             {

@@ -8,7 +8,8 @@
         mc:Ignorable="d"
         WindowStyle="None"
         Title="Homepage" Height="650" Width="1000"
-        ResizeMode="CanResizeWithGrip">
+        ResizeMode="CanResizeWithGrip"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid x:Name="UserPanel" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
@@ -46,7 +47,7 @@
             </Grid>
 
             <StackPanel Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Background="DarkGray">
-                <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,5,0,0" Background="Transparent" BorderThickness="0" Click="ButtonUSB_Click">
+                <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,5,0,0" Background="Transparent" BorderThickness="0" Click="UserInfor_Click">
                     <GroupBox Header="User Information" Padding="20" Background="White" Foreground="DarkRed" FontWeight="Bold" Style="{StaticResource CustomGroupBoxStyle}">
                         <StackPanel>
                             <Image Source="Resources/fauget.png" Width="148" Height="106"/>
@@ -56,8 +57,8 @@
                     </GroupBox>
                 </Button>
 
-                <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,5,0,5" Background="Transparent" BorderThickness="0" >
-                    <GroupBox Header="Vehicle Detail" Padding="20" Background="White" Style="{StaticResource CustomGroupBoxStyle}">
+                <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,5,0,5" Background="Transparent" BorderThickness="0" Click="BookLich_Click" >
+                    <GroupBox Header="Book" Padding="20" Background="White" Style="{StaticResource CustomGroupBoxStyle}">
                         <StackPanel>
                             <Image Source="Resources/fauget.png" Width="148" Height="106"/>
                             <Border BorderThickness="0,0,0,3" BorderBrush="Black" Padding="5">
@@ -67,14 +68,14 @@
                 </Button>
 
                 <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,0,0,0" Background="Transparent" BorderThickness="0" Click="TrackingAllFile">
-                    <GroupBox Header="Timetable" Padding="20"  Background="White" Style="{StaticResource CustomGroupBoxStyle}">
+                    <GroupBox Header="History" Padding="20"  Background="White" Style="{StaticResource CustomGroupBoxStyle}">
                         <StackPanel>
                             <Image Source="Resources/fauget.png" Width="148" Height="106"/>
                             <Border BorderThickness="0,0,0,3" BorderBrush="Black" Padding="5">
                             </Border>
                         </StackPanel>
                     </GroupBox>
-                </Button>
+                    </Button>
             </StackPanel>
 
             <Grid Background="LightGray" Grid.Row="2" Grid.ColumnSpan="2" >
@@ -146,7 +147,7 @@
             </Grid>
 
             <StackPanel Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Background="DarkGray">
-                <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,5,0,0" Background="Transparent" BorderThickness="0" Click="ButtonUSB_Click">
+                <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,5,0,0" Background="Transparent" BorderThickness="0">
                     <GroupBox Header="Account Manegement" Padding="20" Background="White" Foreground="DarkRed" FontWeight="Bold" Style="{StaticResource CustomGroupBoxStyle}">
                         <StackPanel>
                             <Image Source="Resources/fauget.png" Width="148" Height="106"/>

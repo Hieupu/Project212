@@ -6,7 +6,8 @@
       xmlns:local="clr-namespace:Project212"
       mc:Ignorable="d" 
       Height="450" Width="800"
-      Title="Login">
+      Title="Login"
+        WindowStartupLocation="CenterScreen">
 
     <Grid Background="LightBlue">
         <Grid.RowDefinitions>
