@@ -31,12 +31,12 @@ namespace Project212
 
         private void SetUserInterface(string role)
         {
-            if (role == "admin")
+            if (role.Trim() == "admin")
             {
                 AdminPanel.Visibility = Visibility.Visible;
                 UserPanel.Visibility = Visibility.Collapsed;
             }
-            else if (role == "customer")
+            else if (role.Trim() == "customer")
             {
                 UserPanel.Visibility = Visibility.Visible;
                 AdminPanel.Visibility = Visibility.Collapsed;
