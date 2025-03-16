@@ -8,7 +8,8 @@
         mc:Ignorable="d"
         WindowStyle="None"
         Title="Homepage" Height="650" Width="1000"
-        ResizeMode="CanResizeWithGrip">
+        ResizeMode="CanResizeWithGrip"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid x:Name="UserPanel" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
@@ -46,7 +47,7 @@
             </Grid>
 
             <StackPanel Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Background="DarkGray">
-                <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,5,0,0" Background="Transparent" BorderThickness="0" Click="ButtonUSB_Click">
+                <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,5,0,0" Background="Transparent" BorderThickness="0" Click="UserInfor_Click">
                     <GroupBox Header="User Information" Padding="20" Background="White" Foreground="DarkRed" FontWeight="Bold" Style="{StaticResource CustomGroupBoxStyle}">
                         <StackPanel>
                             <Image Source="Resources/fauget.png" Width="148" Height="106"/>
@@ -56,8 +57,8 @@
                     </GroupBox>
                 </Button>
 
-                <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,5,0,5" Background="Transparent" BorderThickness="0" >
-                    <GroupBox Header="Vehicle Detail" Padding="20" Background="White" Style="{StaticResource CustomGroupBoxStyle}">
+                <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,5,0,5" Background="Transparent" BorderThickness="0" Click="BookLich_Click" >
+                    <GroupBox Header="Book" Padding="20" Background="White" Style="{StaticResource CustomGroupBoxStyle}">
                         <StackPanel>
                             <Image Source="Resources/fauget.png" Width="148" Height="106"/>
                             <Border BorderThickness="0,0,0,3" BorderBrush="Black" Padding="5">
@@ -66,8 +67,8 @@
                     </GroupBox>
                 </Button>
 
-                <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,0,0,0" Background="Transparent" BorderThickness="0" Click="TrackingAllFile">
-                    <GroupBox Header="Timetable" Padding="20"  Background="White" Style="{StaticResource CustomGroupBoxStyle}">
+                <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,0,0,0" Background="Transparent" BorderThickness="0" >
+                    <GroupBox Header="History" Padding="20"  Background="White" Style="{StaticResource CustomGroupBoxStyle}">
                         <StackPanel>
                             <Image Source="Resources/fauget.png" Width="148" Height="106"/>
                             <Border BorderThickness="0,0,0,3" BorderBrush="Black" Padding="5">
@@ -103,14 +104,13 @@
                                     Viewport="0.35,0.25,0.35,0.5"
                                     AlignmentY="Top"/>
                         </Grid.Background>
-
                         <Viewbox Name="ContainerUser" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
                     </Grid>
                 </Border>
             </Grid>
         </Grid>
-        
-        <Grid x:Name="AdminPanel" Visibility="Visible">
+
+        <Grid x:Name="AdminPanel" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
@@ -146,7 +146,7 @@
             </Grid>
 
             <StackPanel Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Background="DarkGray">
-                <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,5,0,0" Background="Transparent" BorderThickness="0" Click="ButtonUSB_Click">
+                <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,5,0,0" Background="Transparent" BorderThickness="0">
                     <GroupBox Header="Account Manegement" Padding="20" Background="White" Foreground="DarkRed" FontWeight="Bold" Style="{StaticResource CustomGroupBoxStyle}">
                         <StackPanel>
                             <Image Source="Resources/fauget.png" Width="148" Height="106"/>
@@ -166,7 +166,7 @@
                     </GroupBox>
                 </Button>
 
-                <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,0,0,0" Background="Transparent" BorderThickness="0" Click="TrackingAllFile">
+                <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,0,0,0" Background="Transparent" BorderThickness="0" Click="ManageTimeable_Click">
                     <GroupBox Header=" View Timetable" Padding="20"  Background="White" Style="{StaticResource CustomGroupBoxStyle}">
                         <StackPanel>
                             <Image Source="Resources/fauget.png" Width="148" Height="106"/>
@@ -203,7 +203,85 @@
                             Viewport="0.35,0.25,0.35,0.5"
                             AlignmentY="Top"/>
                         </Grid.Background>
+                        <Viewbox Name="ContainerAdmin" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+        <Grid x:Name="PolicePanel" Visibility="Visible">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
+            <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="WhiteSmoke"
+MouseLeftButtonDown="Grid_MouseLeftButtonDown">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Label Content="MEIM System" HorizontalAlignment="Left" FontWeight="Bold"
+     FontStyle="Italic" Foreground="Black" Margin="10,0,0,0"/>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
+                    <Viewbox Stretch="Uniform">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Width="25" Height="25" Click="MinimizeButton_Click" Style="{DynamicResource CustomBtnClose}">
+                                <fa:ImageAwesome Icon="WindowMinimize" Width="12" Foreground="Black"/>
+                            </Button>
+                            <Button Width="25" Height="25" Click="CloseButton_Click" Style="{DynamicResource CustomBtnClose}">
+                                <fa:ImageAwesome Icon="Close" Width="12" Foreground="Black"/>
+                            </Button>
+                        </StackPanel>
+                    </Viewbox>
+                </StackPanel>
+            </Grid>
+
+            <StackPanel Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Background="DarkGray">
+                <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,5,0,0" Background="Transparent" BorderThickness="0" Click="ViewVehicleList_Click">
+                    <GroupBox Header="Vehicle List" Padding="20" Background="White" Foreground="DarkRed" FontWeight="Bold" Style="{StaticResource CustomGroupBoxStyle}">
+                        <StackPanel>
+                            <Image Source="Resources/fauget.png" Width="148" Height="106"/>
+                            <Border BorderThickness="0,0,0,3" BorderBrush="Black" Padding="5">
+                            </Border>
+                        </StackPanel>
+                    </GroupBox>
+                </Button>
+            </StackPanel>
+
+            <Grid Background="LightGray" Grid.Row="2" Grid.ColumnSpan="2" >
+                <Grid>
+                    <fa:ImageAwesome Icon="file" Height="30" Width="30" Foreground="LightYellow" HorizontalAlignment="Left" Margin="10,5,0,5"/>
+                    <Label Content="Version" FontWeight="Bold" Foreground="#0091FF" Margin="40,0,24,15"/>
+                    <Label Content="1.0.0" FontWeight="Bold" Foreground="White" Margin="40,14,24,2"/>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Row="1" Grid.Column="1" Background="WhiteSmoke">
+                <Border BorderBrush="Black" BorderThickness="2" CornerRadius="1" Padding="5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="18*"/>
+                            <RowDefinition Height="41*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="37*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.Background>
+                            <ImageBrush ImageSource="Resources/fauget.png"
+                      Stretch="Uniform" AlignmentX="Right"
+                      ViewportUnits="RelativeToBoundingBox"
+                      Viewport="0.35,0.25,0.35,0.5"
+                      AlignmentY="Top"/>
+                        </Grid.Background>
+                        <Viewbox Name="ContainerPolice" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
                     </Grid>
                 </Border>
             </Grid>
