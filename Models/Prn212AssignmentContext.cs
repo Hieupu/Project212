@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace Project212.Models;
 
@@ -28,18 +27,15 @@ public partial class Prn212AssignmentContext : DbContext
 
     public virtual DbSet<Record> Records { get; set; }
 
+    public virtual DbSet<Standard> Standards { get; set; }
+
     public virtual DbSet<Timetable> Timetables { get; set; }
 
     public virtual DbSet<Vehicle> Vehicles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        var congfig = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseSqlServer(congfig.GetConnectionString("DBContext"));
-        }
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("server =localhost; database = PRN212_Assignment;uid=sa;pwd=1234;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -52,7 +48,7 @@ public partial class Prn212AssignmentContext : DbContext
                 .HasMaxLength(32)
                 .HasColumnName("password");
             entity.Property(e => e.Role)
-                .HasMaxLength(10)
+                .HasMaxLength(20)
                 .IsFixedLength()
                 .HasColumnName("role");
             entity.Property(e => e.Username)
@@ -156,8 +152,14 @@ public partial class Prn212AssignmentContext : DbContext
                 .HasColumnType("decimal(5, 2)")
                 .HasColumnName("NOx");
             entity.Property(e => e.Result).HasColumnName("result");
+            entity.Property(e => e.StandardId).HasColumnName("standardID");
             entity.Property(e => e.TimeId).HasColumnName("timeID");
             entity.Property(e => e.VehicleId).HasColumnName("vehicleID");
+
+            entity.HasOne(d => d.Standard).WithMany(p => p.Records)
+                .HasForeignKey(d => d.StandardId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Record_Standards");
 
             entity.HasOne(d => d.Time).WithMany(p => p.Records)
                 .HasForeignKey(d => d.TimeId)
@@ -168,6 +170,20 @@ public partial class Prn212AssignmentContext : DbContext
                 .HasForeignKey(d => d.VehicleId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Record_Vehicle");
+        });
+
+        modelBuilder.Entity<Standard>(entity =>
+        {
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.Co).HasColumnName("CO");
+            entity.Property(e => e.Date)
+                .HasColumnType("datetime")
+                .HasColumnName("date");
+            entity.Property(e => e.Hc).HasColumnName("HC");
+            entity.Property(e => e.Nox).HasColumnName("NOx");
+            entity.Property(e => e.VehicleType).HasColumnName("vehicleType");
         });
 
         modelBuilder.Entity<Timetable>(entity =>
@@ -204,6 +220,7 @@ public partial class Prn212AssignmentContext : DbContext
             entity.Property(e => e.Brand)
                 .HasMaxLength(50)
                 .HasColumnName("brand");
+            entity.Property(e => e.Capacity).HasColumnName("capacity");
             entity.Property(e => e.Chassis)
                 .HasMaxLength(12)
                 .IsFixedLength()
@@ -212,7 +229,7 @@ public partial class Prn212AssignmentContext : DbContext
             entity.Property(e => e.Color)
                 .HasMaxLength(50)
                 .HasColumnName("color");
-            entity.Property(e => e.Dofr).HasColumnName("dofr");
+            entity.Property(e => e.Dom).HasColumnName("dom");
             entity.Property(e => e.Engine)
                 .HasMaxLength(12)
                 .IsFixedLength()

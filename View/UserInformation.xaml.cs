@@ -50,12 +50,13 @@ namespace Project212
 
                 if (currentCitizen != null)
                 {
-                    // Display citizen information in the labels
-                    ten.Content = currentCitizen.Name;
-                    ngaysinh.Content = currentCitizen.Dob.ToString("dd/MM/yyyy");
-                    diachi.Content = currentCitizen.Address;
-                    phone.Content = currentCitizen.Phone.ToString();
-                    mail.Content = currentCitizen.Mail;
+                    ten.Content = currentCitizen.Name ?? "Không có tên";
+                    ngaysinh.Content = currentCitizen.Dob != null
+                        ? currentCitizen.Dob.Value.ToString("dd/MM/yyyy")
+                        : "Không có ngày sinh";
+                    diachi.Content = currentCitizen.Address ?? "Không có địa chỉ";
+                    phone.Content = currentCitizen.Phone?.ToString() ?? "Không có số điện thoại";
+                    mail.Content = currentCitizen.Mail ?? "Không có email";
                 }
                 else
                 {

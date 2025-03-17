@@ -21,9 +21,11 @@ public partial class Record
 
     public int TimeId { get; set; }
 
+    public int StandardId { get; set; }
+
+    public virtual Standard Standard { get; set; } = null!;
+
     public virtual Timetable Time { get; set; } = null!;
 
     public virtual Vehicle Vehicle { get; set; } = null!;
-
-    public string ResultText => Result ? "Đạt" : "Không đạt";
 }

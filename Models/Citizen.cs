@@ -7,15 +7,15 @@ public partial class Citizen
 {
     public int Id { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string? Name { get; set; }
 
-    public DateOnly Dob { get; set; }
+    public DateOnly? Dob { get; set; }
 
-    public string Address { get; set; } = null!;
+    public string? Address { get; set; }
 
-    public int Phone { get; set; }
+    public int? Phone { get; set; }
 
-    public string Mail { get; set; } = null!;
+    public string? Mail { get; set; }
 
     public int AccId { get; set; }
 

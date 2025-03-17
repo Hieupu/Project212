@@ -37,10 +37,15 @@ namespace Project212
         {
             if (RecordDataGrid.SelectedItem is Record selectedRecord)
             {
-                txtID.Text = selectedRecord.Id.ToString();
-                txtLicensePlate.Text = selectedRecord.Vehicle.Plate;
-                txtVehicleType.Text = selectedRecord.Vehicle.Engine;
+                txtBrand.Text = selectedRecord.Vehicle.Brand;
+                txtColor.Text = selectedRecord.Vehicle.Color;
+                txtModel.Text = selectedRecord.Vehicle.Model;
                 txtOwner.Text = selectedRecord.Vehicle.Citizen.Name;
+                txtCapacity.Text = selectedRecord.Vehicle.Capacity.ToString();
+                txtDom.Text = selectedRecord.Vehicle.Dom.ToString();
+                txtChassis.Text = selectedRecord.Vehicle.Chassis;
+                txtEngine.Text = selectedRecord.Vehicle.Engine;
+
             }
         }
     }

@@ -45,23 +45,35 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Cột 1: ID -->
-                <TextBlock Text="ID:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-                <TextBox x:Name="txtID" Grid.Row="0" Grid.Column="1" IsReadOnly="True" Margin="5"/>
+                <TextBlock Text="Nhãn hiệu:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+                <TextBox x:Name="txtBrand" Grid.Row="0" Grid.Column="1" IsReadOnly="True" Margin="5"/>
 
-                <!-- Cột 2: Biển Số -->
-                <TextBlock Text="Biển Số:" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Margin="5"/>
-                <TextBox x:Name="txtLicensePlate" Grid.Row="0" Grid.Column="3" Margin="5" />
+                <TextBlock Text="Dung tích:" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Margin="5"/>
+                <TextBox x:Name="txtCapacity" Grid.Row="0" Grid.Column="3" Margin="5" />
 
-                <!-- Cột 1: Loại Xe -->
-                <TextBlock Text="Loại Xe:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-                <TextBox x:Name="txtVehicleType" Grid.Row="1" Grid.Column="1" Margin="5" />
+                <TextBlock Text="Số loại:" Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" Margin="5"/>
+                <TextBox x:Name="txtModel" Grid.Row="0" Grid.Column="5" Margin="5" />
 
-                <!-- Cột 2: Chủ Sở Hữu -->
-                <TextBlock Text="Chủ Sở Hữu:" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="5"/>
-                <TextBox x:Name="txtOwner" Grid.Row="1" Grid.Column="3" Margin="5" />
+                <TextBlock Text="Ngày sản xuất:" Grid.Row="0" Grid.Column="6" VerticalAlignment="Center" Margin="5"/>
+                <TextBox x:Name="txtDom" Grid.Row="0" Grid.Column="7" Margin="5" />
+                
+                <TextBlock Text="Màu sơn:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+                <TextBox x:Name="txtColor" Grid.Row="1" Grid.Column="1" Margin="5" />
+
+                <TextBlock Text="Số khung:" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="5"/>
+                <TextBox x:Name="txtChassis" Grid.Row="1" Grid.Column="3" Margin="5" />
+
+                <TextBlock Text="Số máy:" Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" Margin="5"/>
+                <TextBox x:Name="txtEngine" Grid.Row="1" Grid.Column="5" Margin="5" />
+
+                <TextBlock Text="Chủ Sở Hữu:" Grid.Row="1" Grid.Column="6" VerticalAlignment="Center" Margin="5"/>
+                <TextBox x:Name="txtOwner" Grid.Row="1" Grid.Column="7" Margin="5" />
             </Grid>
         </StackPanel>
     </Grid>

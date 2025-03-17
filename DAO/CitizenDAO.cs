@@ -20,7 +20,7 @@ namespace Project212.DAO
         public Citizen GetCitizenByAccountId(int accountId)
         {
             return context.Citizens
-                .FirstOrDefault(c => c.AccId == accountId);
+                .FirstOrDefault(c => c.AccId == accountId) ?? new Citizen();
         }
 
         public bool UpdateCitizen(Citizen citizen)

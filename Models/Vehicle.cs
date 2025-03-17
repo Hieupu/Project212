@@ -19,9 +19,11 @@ public partial class Vehicle
 
     public string Plate { get; set; } = null!;
 
-    public DateOnly Dofr { get; set; }
+    public DateOnly Dom { get; set; }
 
     public int CitizenId { get; set; }
+
+    public int? Capacity { get; set; }
 
     public virtual Citizen Citizen { get; set; } = null!;
 
