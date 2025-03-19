@@ -86,9 +86,17 @@ namespace Project212
 
 
         
-        private void TrackingAllFile(object sender, RoutedEventArgs e)
+        private void History_Click(object sender, RoutedEventArgs e)
         {
-            ContainerUser.Child = new Timetable(); 
+            // Tạo một thể hiện của BookLich
+            History historyControl = new History();
+
+            // Thiết lập kích thước theo kích thước của ContainerUser
+            historyControl.Width = ContainerUser.ActualWidth;
+            historyControl.Height = ContainerUser.ActualHeight;
+
+            // Gán vào ContainerUser (giống cách bạn làm với UserInformation)
+            ContainerUser.Child = historyControl;
         }
 
         //nút Book
@@ -103,6 +111,17 @@ namespace Project212
 
             // Gán vào ContainerUser (giống cách bạn làm với UserInformation)
             ContainerUser.Child = bookLichControl;
+        }
+
+        private void ButLogOut_Click(object sender, RoutedEventArgs e)
+        {
+            //Console.WriteLine($"Before logout: {UserSession.CurrentUser?.Username}"); // Kiểm tra user trước khi logout
+            UserSession.CurrentUser = null; // Xoá phiên đăng nhập
+            //Console.WriteLine($"After logout: {UserSession.CurrentUser}"); // Kiểm tra sau khi logout
+            Login login = new Login();
+            login.Show();
+
+            this.Close();
         }
     }
 }

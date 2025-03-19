@@ -41,8 +41,24 @@ namespace Project212.DAO
                 }
                 return false;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine("Lỗi khi cập nhật: " + ex.Message);
+                return false;
+            }
+        }
+
+        public bool AddCitizen(Citizen citizen)
+        {
+            try
+            {
+                context.Citizens.Add(citizen);
+                context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi khi thêm mới: " + ex.Message);
                 return false;
             }
         }

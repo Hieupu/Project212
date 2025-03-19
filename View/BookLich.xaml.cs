@@ -24,14 +24,14 @@ namespace Project212
     {
         private readonly TimetableDAO _timetableDAO;
         private readonly Prn212AssignmentContext _context;
-        private int _currentUserId = 1; // Giả sử người dùng có ID 1, có thể thay đổi theo đăng nhập thực tế
         private DateTime _selectedInspectTime;
         private int _selectedStationId; //id của "TRẠM KIỂM ĐỊNH"
-
+        private int _currentUserId;
         public BookLich()
         {
             _context = new Prn212AssignmentContext();
-
+            _currentUserId = UserSession.CurrentUser?.Id ?? -1;
+            MessageBox.Show($"Current User ID: {_currentUserId}");
             _timetableDAO = new TimetableDAO(_context);
             InitializeComponent();
             LoadComboboxRoles();
@@ -65,6 +65,15 @@ namespace Project212
             }
 
             int inspectionId = (int)cbRoles1.SelectedValue;
+            DateTime gioihan = dpThoigian.SelectedDate.Value;
+
+            // Kiểm tra nếu ngày được chọn nhỏ hơn ngày hiện tại
+            if (gioihan < DateTime.Today)
+            {
+                MessageBox.Show("Không thể đặt lịch trong quá khứ. Vui lòng chọn ngày hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             DateTime selectedDate = dpThoigian.SelectedDate.Value;
             int selectedHour = int.Parse(((ComboBoxItem)cbHours.SelectedItem).Content.ToString());
             DateTime inspectTime = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, selectedHour, 0, 0);
@@ -84,48 +93,43 @@ namespace Project212
 
 
         //reload dữ liệu mới nhất
-        private void LoadTimetableHistory()     //reload dữ liệu mới nhất
+        private void LoadTimetableHistory()
         {
+            // Debug to confirm the current user ID
+            int userId = UserSession.CurrentUser?.Id ?? -1;
+
+            // Check if current user ID matches what we expect
+            if (_currentUserId != userId)
+            {
+                // Update current user ID if it doesn't match
+                _currentUserId = userId;
+                //MessageBox.Show($"User ID mismatch corrected. Current ID: {_currentUserId}");
+            }
+
+            // Check if there are any timetables for this user at all
+            var allTimetables = _context.Timetables.Where(t => t.AccId == _currentUserId).ToList();
+
+            if (allTimetables.Count == 0)
+            {
+                // No timetables found for this user
+                MessageBox.Show($"Không tìm thấy lịch trình cho ID người dùng: {_currentUserId}");
+                dgVehiclesLichsu.ItemsSource = null; // Clear the data grid
+                return;
+            }
+
+            // Proceed with loading timetables as before
             dgVehiclesLichsu.ItemsSource = _context.Timetables
                 .Where(t => t.AccId == _currentUserId)
                 .Select(t => new
                 {
-                    StationID = t.InspectionId, // Đổi từ t.Inspection.Name -> t.InspectionId
-                    StationName = t.Inspection.Name, // Nếu vẫn cần hiển thị tên trạm
+                    StationID = t.InspectionId,
+                    StationName = t.Inspection.Name,
                     AppointmentDate = t.InspectTime,
                     Status = t.Status
                 }).ToList();
         }
 
-        //đang sửa
-        //private void dgVehiclesLichsu_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    if (dgVehiclesLichsu.SelectedItem != null)
-        //    {
-        //        var selectedRow = (dynamic)dgVehiclesLichsu.SelectedItem;
-
-        //        _selectedInspectTime = selectedRow.AppointmentDate;
-        //        _selectedStationId = Convert.ToInt32(selectedRow.StationID);
-        //        string selectedStatus = selectedRow.Status; // Lấy trạng thái của lịch
-
-        //        //MessageBox.Show($"Trạng thái lấy được: {selectedStatus}", "Debug", MessageBoxButton.OK, MessageBoxImage.Information);
-
-        //        // Nếu trạng thái là "Đã hủy", khóa nút hủy
-        //        //btnHuylich.IsEnabled = selectedStatus != "Đã hủy";
-        //        if (selectedStatus.Trim() == "Đã hủy")
-        //        {
-        //            btnHuylich.IsEnabled = false;
-        //        }
-        //        else
-        //        {
-        //            btnHuylich.IsEnabled = true;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        btnHuylich.IsEnabled = false; // Không có lịch nào được chọn thì vô hiệu hóa nút
-        //    }
-        //}
+        
 
         private void dgVehiclesLichsu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
