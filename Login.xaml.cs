@@ -44,8 +44,9 @@ namespace Project212
             if (account != null)
             {
                 Homepage homepage = new Homepage(account);
-                homepage.Show();
                 this.Close();
+                homepage.Show();
+                
             }
             else
             {

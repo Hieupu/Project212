@@ -168,7 +168,7 @@
                 </Button>
 
                 <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,0,0,0" Background="Transparent" BorderThickness="0" Click="TrackingAllFile">
-                    <GroupBox Header="Timetable" Padding="20"  Background="White" Style="{StaticResource CustomGroupBoxStyle}">
+                    <GroupBox Header=" View Timetable" Padding="20"  Background="White" Style="{StaticResource CustomGroupBoxStyle}">
                         <StackPanel>
                             <Image Source="Resources/fauget.png" Width="148" Height="106"/>
                             <Border BorderThickness="0,0,0,3" BorderBrush="Black" Padding="5">
