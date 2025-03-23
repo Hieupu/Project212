@@ -31,11 +31,13 @@ namespace Project212
         {
             _context = new Prn212AssignmentContext();
             _currentUserId = UserSession.CurrentUser?.Id ?? -1;
-            MessageBox.Show($"Current User ID: {_currentUserId}");
+            //MessageBox.Show($"Current User ID: {_currentUserId}");
             _timetableDAO = new TimetableDAO(_context);
             InitializeComponent();
             LoadComboboxRoles();
             LoadTimetableHistory();
+            LoadComboboxCoso();
+            FilterTimetableHistory();
         }
 
         //Load dữ liệu "TRẠM KIỂM ĐỊNH"
@@ -54,6 +56,31 @@ namespace Project212
                 cbRoles1.ItemsSource = null; // Tránh lỗi khi danh sách rỗng
             }
         }
+        void LoadComboboxCoso()
+        {
+            var stations = CosoDAO.GetInspectionStations();
+            if (stations != null && stations.Count > 0)
+            {
+                // Create a new list that includes an "All" option at the beginning
+                var allStations = new List<dynamic>();
+
+                // Add an "All" option with ID -1 (or any value that doesn't conflict with your actual IDs)
+                allStations.Add(new { Id = -1, Name = "Tất cả" });
+
+                // Add all the actual stations
+                allStations.AddRange(stations);
+
+                cbCoso.ItemsSource = allStations;
+                cbCoso.DisplayMemberPath = "Name";
+                cbCoso.SelectedValuePath = "Id";
+                cbCoso.SelectedIndex = 0; // Select "All" by default
+            }
+            else
+            {
+                cbCoso.ItemsSource = null;
+            }
+        }
+
 
         // nút "ĐẶT LỊCH"
         private void btnDatlich_Click(object sender, RoutedEventArgs e)
@@ -128,8 +155,47 @@ namespace Project212
                     Status = t.Status
                 }).ToList();
         }
+        private void FilterTimetableHistory()
+        {
+            try
+            {
+                // Get the current user ID
+                int userId = UserSession.CurrentUser?.Id ?? -1;
 
-        
+                // Start with the base query for the current user
+                var query = _context.Timetables.Where(t => t.AccId == _currentUserId);
+
+                // Apply station filter if selected (and not "All")
+                if (cbCoso.SelectedValue != null && cbCoso.SelectedIndex > 0) // Assuming index 0 is "All"
+                {
+                    int selectedStationId = (int)cbCoso.SelectedValue;
+                    query = query.Where(t => t.InspectionId == selectedStationId);
+                }
+
+                // Apply date filter if selected
+                if (txtSearch.SelectedDate != null)
+                {
+                    DateTime selectedDate = txtSearch.SelectedDate.Value.Date;
+                    query = query.Where(t => t.InspectTime.Date == selectedDate);
+                }
+
+                // Execute the query and update the DataGrid
+                dgVehiclesLichsu.ItemsSource = query
+                    .Select(t => new
+                    {
+                        StationID = t.InspectionId,
+                        StationName = t.Inspection.Name,
+                        AppointmentDate = t.InspectTime,
+                        Status = t.Status
+                    }).ToList();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error filtering data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
 
         private void dgVehiclesLichsu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -177,6 +243,14 @@ namespace Project212
             }
         }
 
-       
+        private void cbCoso_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            FilterTimetableHistory();
+        }
+        private void txtSearch_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            FilterTimetableHistory();
+        }
+
     }
 }
