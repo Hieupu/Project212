@@ -22,7 +22,7 @@ namespace Project212.DAO
             return context.Vehicles.Include(v => v.Citizen).ToList();
         }
 
-        public List<Vehicle> GetVehiclesByCitizenId(int citizenId)
+        public List<Vehicle> GetVehiclesByCitizenId(string citizenId)
         {
             return context.Vehicles
                 .Include(v => v.Citizen)

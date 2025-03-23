@@ -5,7 +5,7 @@ namespace Project212.Models;
 
 public partial class Citizen
 {
-    public int Id { get; set; }
+    public string? Id { get; set; }
 
     public string? Name { get; set; }
 

@@ -21,7 +21,7 @@ public partial class Vehicle
 
     public DateOnly Dom { get; set; }
 
-    public int CitizenId { get; set; }
+    public string? CitizenId { get; set; }
 
     public int? Capacity { get; set; }
 

@@ -33,7 +33,7 @@ namespace Project212
         {
             role = role.Trim(); 
 
-            if (role == "admin")
+            if (role.Trim() == "admin")
             {
                 AdminPanel.Visibility = Visibility.Visible;
                 UserPanel.Visibility = Visibility.Collapsed;
@@ -88,6 +88,14 @@ namespace Project212
             }
         }
 
+        private void AccountManagement_Click(object sender, RoutedEventArgs e)
+        {
+            AccountManagement accountManagement = new AccountManagement();
+            accountManagement.Width = ContainerAdmin.ActualWidth;
+            accountManagement.Height = ContainerAdmin.ActualHeight;
+
+            ContainerAdmin.Child = accountManagement;
+        }
         private void UserInfor_Click(object sender, RoutedEventArgs e)
         {
             UserInformation userInfo = new UserInformation(account);

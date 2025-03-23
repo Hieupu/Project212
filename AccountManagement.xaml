@@ -1,0 +1,132 @@
+﻿<UserControl x:Class="Project212.AccountManagement"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Project212"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Account Management" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,2"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="225"/>
+            </Grid.ColumnDefinitions>
+
+            <DataGrid x:Name="UserList" Grid.Column="0" AutoGenerateColumns="False" Margin="10" IsReadOnly="True" SelectionChanged="UserList_SelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="*"/>
+                    <DataGridTextColumn Header="Password" Binding="{Binding Password}" Width="*"/>
+                    <DataGridTextColumn Header="Citizen ID" Binding="{Binding Citizens[0].Id}" Width="*"/>
+                    <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="200"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="User Information" 
+                           Grid.Row="0" 
+                           FontSize="16" 
+                           FontWeight="Bold" 
+                           HorizontalAlignment="Center"/>
+
+                <Grid Grid.Row="1" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Username" Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
+                    <TextBox x:Name="Username" Grid.Row="0" Grid.Column="1" Margin="5" IsReadOnly="True"/>
+
+                    <TextBlock Text="Password" Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
+                    <TextBox x:Name="Password" Grid.Row="1" Grid.Column="1" Margin="5" IsReadOnly="True"/>
+
+                    <TextBlock Text="Name" Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
+                    <TextBox x:Name="Name" Grid.Row="2" Grid.Column="1" Margin="5" IsReadOnly="True"/>
+
+                    <TextBlock Text="Citizen Id" Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
+                    <TextBox x:Name="CitizenId" Grid.Row="3" Grid.Column="1" Margin="5" IsReadOnly="True"/>
+
+                    <TextBlock Text="DoB" Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
+                    <TextBox x:Name="DoB" Grid.Row="4" Grid.Column="1" Margin="5" IsReadOnly="True"/>
+
+                    <TextBlock Text="Email" Grid.Row="5" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
+                    <TextBox x:Name="Email" Grid.Row="5" Grid.Column="1" Margin="5" IsReadOnly="True"/>
+
+                    <TextBlock Text="Role" Margin="5" Grid.Row="6" Grid.Column="0"/>
+                    <ComboBox x:Name="Role" Margin="5" IsEnabled="True" Grid.Row="6" Grid.Column="1">
+                        <ComboBoxItem Content="Admin"/>
+                        <ComboBoxItem Content="Customer"/>
+                        <ComboBoxItem Content="Police"/>
+                        <ComboBoxItem Content="Receptionist"/>
+                        <ComboBoxItem Content="Engineer"/>
+                    </ComboBox>
+                    
+                </Grid>
+
+                <TextBlock Text="Create Account" Grid.Row="2" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+
+                <Grid Grid.Row="3" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Username" Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtUsername" Grid.Row="0" Grid.Column="1" Margin="5"/>
+
+                    <TextBlock Text="Password" Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtPassword" Grid.Row="1" Grid.Column="1" Margin="5"/>
+
+                    <TextBlock Text="Citizen Id" Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtCitizenId" Grid.Row="2" Grid.Column="1" Margin="5"/>
+
+                    <TextBlock Text="Role" Margin="5" Grid.Row="4" Grid.Column="0"/>
+                    <ComboBox x:Name="ComboboxRole" Margin="5" IsEnabled="True" Grid.Row="4" Grid.Column="1">
+                        <ComboBoxItem Content="Admin"/>
+                        <ComboBoxItem Content="Customer"/>
+                        <ComboBoxItem Content="Police"/>
+                        <ComboBoxItem Content="Receptionist"/>
+                        <ComboBoxItem Content="Engineer"/>
+                    </ComboBox>
+                </Grid>
+
+            </Grid>
+        </Grid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Add User" Width="100" Margin="5" Click="AddUser_Click"/>
+            <Button Content="Update Role" Click="UpdateRole_Click" Margin="2" Width="120" HorizontalAlignment="Right"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

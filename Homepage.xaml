@@ -110,7 +110,7 @@
             </Grid>
         </Grid>
 
-        <Grid x:Name="AdminPanel" Visibility="Collapsed">
+        <Grid x:Name="AdminPanel" Visibility="Visible">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
@@ -146,7 +146,7 @@
             </Grid>
 
             <StackPanel Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Background="DarkGray">
-                <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,5,0,0" Background="Transparent" BorderThickness="0">
+                <Button Width="180" Padding="0" HorizontalAlignment="Center" Margin="0,5,0,0" Background="Transparent" BorderThickness="0" Click="AccountManagement_Click">
                     <GroupBox Header="Account Manegement" Padding="20" Background="White" Foreground="DarkRed" FontWeight="Bold" Style="{StaticResource CustomGroupBoxStyle}">
                         <StackPanel>
                             <Image Source="Resources/fauget.png" Width="148" Height="106"/>
@@ -208,7 +208,7 @@
                 </Border>
             </Grid>
         </Grid>
-        <Grid x:Name="PolicePanel" Visibility="Visible">
+        <Grid x:Name="PolicePanel" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
