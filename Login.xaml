@@ -26,8 +26,8 @@
             <TextBlock Text="Password:" FontSize="16" Margin="10,20,0,5" Foreground="DarkBlue"/>
             <PasswordBox x:Name="PasswordBox" Width="200" Height="30" FontSize="16"/>
 
-            <TextBlock x:Name="ConfirmPasswordLabel" Text="Confirm Password:" FontSize="16" Margin="10,20,0,5" Foreground="DarkBlue" Visibility="Collapsed"/>
-            <PasswordBox x:Name="ConfirmPasswordBox" Width="200" Height="30" FontSize="16" Visibility="Collapsed"/>
+            <TextBlock x:Name="CitizenIDLabel" Text="CitizenID:" FontSize="16" Margin="10,20,0,5" Foreground="DarkBlue" Visibility="Collapsed"/>
+            <TextBox x:Name="CitizenIDBox" Width="200" Height="30" FontSize="16" Visibility="Collapsed"/>
         </StackPanel>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,0">

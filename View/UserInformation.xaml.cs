@@ -40,6 +40,7 @@ namespace Project212
             currentAccount = account;
             LoadUserInformation();
             LoadDataGridVehicle();
+            LoadInforChinhSua();
         }
 
         private void LoadUserInformation()
@@ -72,6 +73,164 @@ namespace Project212
                 var vehicles = vehicleDAO.GetVehiclesByCitizenId(currentCitizen.Id);
                 this.dgVehicles.ItemsSource = vehicles;
             }
+        }
+
+        private void LoadInforChinhSua()
+        {
+            if (currentAccount != null)
+            {
+                currentCitizen = citizenDAO.GetCitizenByAccountId(currentAccount.Id);
+                if (currentCitizen != null)
+                {
+                    // Display citizen information in the labels
+                    tbTen.Text = currentCitizen.Name;
+                    dtNgaysinh.SelectedDate = currentCitizen.Dob.HasValue
+    ? currentCitizen.Dob.Value.ToDateTime(TimeOnly.MinValue)
+    : null;
+
+                    tbDiachi.Text = currentCitizen.Address;
+                    tbPhone.Text = currentCitizen.Phone.ToString();
+                    tbMail.Text = currentCitizen.Mail;
+                }
+            }
+
+        }
+
+        private void btnChinhsua_Click(object sender, RoutedEventArgs e)
+        {
+            tbTen.IsEnabled = true;
+            dtNgaysinh.IsEnabled = true;
+            tbDiachi.IsEnabled = true;
+            tbPhone.IsEnabled = true;
+            tbMail.IsEnabled = true;
+
+            if (currentCitizen != null)
+            {
+                btnUpdate.IsEnabled = true;
+            }
+            else
+            {
+                btnAdd.IsEnabled = true;
+            }
+        }
+
+        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Validate input data
+                if (string.IsNullOrWhiteSpace(tbTen.Text) ||
+                    dtNgaysinh.SelectedDate == null ||
+                    string.IsNullOrWhiteSpace(tbDiachi.Text) ||
+                    string.IsNullOrWhiteSpace(tbPhone.Text) ||
+                    string.IsNullOrWhiteSpace(tbMail.Text))
+                {
+                    MessageBox.Show("Vui lòng điền đầy đủ thông tin!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Validate phone number
+                if (!int.TryParse(tbPhone.Text, out int phoneNumber))
+                {
+                    MessageBox.Show("Số điện thoại không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Create a new Citizen object
+                Citizen newCitizen = new Citizen
+                {
+                    Name = tbTen.Text,
+                    Dob = DateOnly.FromDateTime(dtNgaysinh.SelectedDate.Value),
+                    Address = tbDiachi.Text,
+                    Phone = phoneNumber,
+                    Mail = tbMail.Text,
+                    AccId = currentAccount.Id
+                };
+
+                using (Prn212AssignmentContext context = new Prn212AssignmentContext())
+                {
+                    context.Citizens.Add(newCitizen);
+                    context.SaveChanges();
+
+                    // Update the current citizen reference
+                    currentCitizen = newCitizen;
+
+                    MessageBox.Show("Thêm thông tin thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    // Reload user information
+                    LoadUserInformation();
+
+                    // Disable editing fields
+                    DisableEditFields();
+
+                    // Enable Update button instead of Add for future edits
+                    btnAdd.IsEnabled = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Validate input data
+                if (string.IsNullOrWhiteSpace(tbTen.Text) ||
+                    dtNgaysinh.SelectedDate == null ||
+                    string.IsNullOrWhiteSpace(tbDiachi.Text) ||
+                    string.IsNullOrWhiteSpace(tbPhone.Text) ||
+                    string.IsNullOrWhiteSpace(tbMail.Text))
+                {
+                    MessageBox.Show("Vui lòng điền đầy đủ thông tin!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Validate phone number
+                if (!int.TryParse(tbPhone.Text, out int phoneNumber))
+                {
+                    MessageBox.Show("Số điện thoại không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Update citizen data
+                currentCitizen.Name = tbTen.Text;
+                currentCitizen.Dob = DateOnly.FromDateTime(dtNgaysinh.SelectedDate.Value);
+                currentCitizen.Address = tbDiachi.Text;
+                currentCitizen.Phone = phoneNumber;
+                currentCitizen.Mail = tbMail.Text;
+
+                bool result = citizenDAO.UpdateCitizen(currentCitizen);
+                if (result)
+                {
+                    MessageBox.Show("Cập nhật thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    // Reload user information to display updated data
+                    LoadUserInformation();
+
+                    // Disable all fields after successful update
+                    DisableEditFields();
+                }
+                else
+                {
+                    MessageBox.Show("Cập nhật thất bại!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private void DisableEditFields()
+        {
+            tbTen.IsEnabled = false;
+            dtNgaysinh.IsEnabled = false;
+            tbDiachi.IsEnabled = false;
+            tbPhone.IsEnabled = false;
+            tbMail.IsEnabled = false;
+            btnUpdate.IsEnabled = false;
         }
     }
 }

@@ -113,22 +113,38 @@ namespace Project212
             ContainerAdmin.Child = timetableControl; 
         }
 
-        private void ViewVehicleList_Click(object sender, RoutedEventArgs e)
-        {
+        private void ViewVehicleList_Click(object sender, RoutedEventArgs e) { 
             PoliceView policeView = new PoliceView();
             policeView.Width = ContainerPolice.ActualWidth;
             policeView.Height = ContainerPolice.ActualHeight;
-
             ContainerPolice.Child = policeView;
         }
-        
-        private void BookLich_Click(object sender, RoutedEventArgs e)
+    private void History_Click(object sender, RoutedEventArgs e)
+    {
+        History historyControl = new History();
+
+        historyControl.Width = ContainerUser.ActualWidth;
+        historyControl.Height = ContainerUser.ActualHeight;
+
+        ContainerUser.Child = historyControl;
+    }
+
+    private void BookLich_Click(object sender, RoutedEventArgs e)
         {
             BookLich bookLichControl = new BookLich();
             bookLichControl.Width = ContainerUser.ActualWidth;
             bookLichControl.Height = ContainerUser.ActualHeight;
 
             ContainerUser.Child = bookLichControl;
+        }
+
+        private void ButLogOut_Click(object sender, RoutedEventArgs e)
+        {
+            UserSession.CurrentUser = null; // Xoá phiên đăng nhập
+            Login login = new Login();
+            login.Show();
+
+            this.Close();
         }
     }
 }

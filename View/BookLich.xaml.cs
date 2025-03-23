@@ -24,18 +24,20 @@ namespace Project212
     {
         private readonly TimetableDAO _timetableDAO;
         private readonly Prn212AssignmentContext _context;
-        private int _currentUserId = 1; // Giả sử người dùng có ID 1, có thể thay đổi theo đăng nhập thực tế
         private DateTime _selectedInspectTime;
         private int _selectedStationId; //id của "TRẠM KIỂM ĐỊNH"
-
+        private int _currentUserId;
         public BookLich()
         {
             _context = new Prn212AssignmentContext();
-
+            _currentUserId = UserSession.CurrentUser?.Id ?? -1;
+            //MessageBox.Show($"Current User ID: {_currentUserId}");
             _timetableDAO = new TimetableDAO(_context);
             InitializeComponent();
             LoadComboboxRoles();
             LoadTimetableHistory();
+            LoadComboboxCoso();
+            FilterTimetableHistory();
         }
 
         //Load dữ liệu "TRẠM KIỂM ĐỊNH"
@@ -54,6 +56,31 @@ namespace Project212
                 cbRoles1.ItemsSource = null; // Tránh lỗi khi danh sách rỗng
             }
         }
+        void LoadComboboxCoso()
+        {
+            var stations = CosoDAO.GetInspectionStations();
+            if (stations != null && stations.Count > 0)
+            {
+                // Create a new list that includes an "All" option at the beginning
+                var allStations = new List<dynamic>();
+
+                // Add an "All" option with ID -1 (or any value that doesn't conflict with your actual IDs)
+                allStations.Add(new { Id = -1, Name = "Tất cả" });
+
+                // Add all the actual stations
+                allStations.AddRange(stations);
+
+                cbCoso.ItemsSource = allStations;
+                cbCoso.DisplayMemberPath = "Name";
+                cbCoso.SelectedValuePath = "Id";
+                cbCoso.SelectedIndex = 0; // Select "All" by default
+            }
+            else
+            {
+                cbCoso.ItemsSource = null;
+            }
+        }
+
 
         // nút "ĐẶT LỊCH"
         private void btnDatlich_Click(object sender, RoutedEventArgs e)
@@ -65,6 +92,15 @@ namespace Project212
             }
 
             int inspectionId = (int)cbRoles1.SelectedValue;
+            DateTime gioihan = dpThoigian.SelectedDate.Value;
+
+            // Kiểm tra nếu ngày được chọn nhỏ hơn ngày hiện tại
+            if (gioihan < DateTime.Today)
+            {
+                MessageBox.Show("Không thể đặt lịch trong quá khứ. Vui lòng chọn ngày hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             DateTime selectedDate = dpThoigian.SelectedDate.Value;
             int selectedHour = int.Parse(((ComboBoxItem)cbHours.SelectedItem).Content.ToString());
             DateTime inspectTime = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, selectedHour, 0, 0);
@@ -84,48 +120,82 @@ namespace Project212
 
 
         //reload dữ liệu mới nhất
-        private void LoadTimetableHistory()     //reload dữ liệu mới nhất
+        private void LoadTimetableHistory()
         {
+            // Debug to confirm the current user ID
+            int userId = UserSession.CurrentUser?.Id ?? -1;
+
+            // Check if current user ID matches what we expect
+            if (_currentUserId != userId)
+            {
+                // Update current user ID if it doesn't match
+                _currentUserId = userId;
+                //MessageBox.Show($"User ID mismatch corrected. Current ID: {_currentUserId}");
+            }
+
+            // Check if there are any timetables for this user at all
+            var allTimetables = _context.Timetables.Where(t => t.AccId == _currentUserId).ToList();
+
+            if (allTimetables.Count == 0)
+            {
+                // No timetables found for this user
+                MessageBox.Show($"Không tìm thấy lịch trình cho ID người dùng: {_currentUserId}");
+                dgVehiclesLichsu.ItemsSource = null; // Clear the data grid
+                return;
+            }
+
+            // Proceed with loading timetables as before
             dgVehiclesLichsu.ItemsSource = _context.Timetables
                 .Where(t => t.AccId == _currentUserId)
                 .Select(t => new
                 {
-                    StationID = t.InspectionId, // Đổi từ t.Inspection.Name -> t.InspectionId
-                    StationName = t.Inspection.Name, // Nếu vẫn cần hiển thị tên trạm
+                    StationID = t.InspectionId,
+                    StationName = t.Inspection.Name,
                     AppointmentDate = t.InspectTime,
                     Status = t.Status
                 }).ToList();
         }
+        private void FilterTimetableHistory()
+        {
+            try
+            {
+                // Get the current user ID
+                int userId = UserSession.CurrentUser?.Id ?? -1;
 
-        //đang sửa
-        //private void dgVehiclesLichsu_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    if (dgVehiclesLichsu.SelectedItem != null)
-        //    {
-        //        var selectedRow = (dynamic)dgVehiclesLichsu.SelectedItem;
+                // Start with the base query for the current user
+                var query = _context.Timetables.Where(t => t.AccId == _currentUserId);
 
-        //        _selectedInspectTime = selectedRow.AppointmentDate;
-        //        _selectedStationId = Convert.ToInt32(selectedRow.StationID);
-        //        string selectedStatus = selectedRow.Status; // Lấy trạng thái của lịch
+                // Apply station filter if selected (and not "All")
+                if (cbCoso.SelectedValue != null && cbCoso.SelectedIndex > 0) // Assuming index 0 is "All"
+                {
+                    int selectedStationId = (int)cbCoso.SelectedValue;
+                    query = query.Where(t => t.InspectionId == selectedStationId);
+                }
 
-        //        //MessageBox.Show($"Trạng thái lấy được: {selectedStatus}", "Debug", MessageBoxButton.OK, MessageBoxImage.Information);
+                // Apply date filter if selected
+                if (txtSearch.SelectedDate != null)
+                {
+                    DateTime selectedDate = txtSearch.SelectedDate.Value.Date;
+                    query = query.Where(t => t.InspectTime.Date == selectedDate);
+                }
 
-        //        // Nếu trạng thái là "Đã hủy", khóa nút hủy
-        //        //btnHuylich.IsEnabled = selectedStatus != "Đã hủy";
-        //        if (selectedStatus.Trim() == "Đã hủy")
-        //        {
-        //            btnHuylich.IsEnabled = false;
-        //        }
-        //        else
-        //        {
-        //            btnHuylich.IsEnabled = true;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        btnHuylich.IsEnabled = false; // Không có lịch nào được chọn thì vô hiệu hóa nút
-        //    }
-        //}
+                // Execute the query and update the DataGrid
+                dgVehiclesLichsu.ItemsSource = query
+                    .Select(t => new
+                    {
+                        StationID = t.InspectionId,
+                        StationName = t.Inspection.Name,
+                        AppointmentDate = t.InspectTime,
+                        Status = t.Status
+                    }).ToList();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error filtering data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
 
         private void dgVehiclesLichsu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -173,6 +243,14 @@ namespace Project212
             }
         }
 
-       
+        private void cbCoso_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            FilterTimetableHistory();
+        }
+        private void txtSearch_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            FilterTimetableHistory();
+        }
+
     }
 }

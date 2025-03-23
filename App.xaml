@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:Project212"
              StartupUri="Login.xaml">
     <Application.Resources>
+        <local:ReadStatusConverter x:Key="ReadStatusConverter"/>
+        <local:BoolToResultConverter x:Key="ResultConverter"/>
         <Style x:Key="CustomBtnClose" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="Black"/>
