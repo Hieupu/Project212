@@ -1,0 +1,79 @@
+﻿<Window x:Class="Project212.View.StandardManagement"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Project212.View"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="StandardManagement" Height="450" Width="800">
+    <Grid Margin="0,0,40,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="0" Grid.Column="0" Background="LightBlue" Margin="10,10,10,10" Width="250" Grid.RowSpan="2">
+            <Label Content="Record" FontSize="20" FontWeight="Bold"></Label>
+            <StackPanel Orientation="Vertical">
+                <Label Content="Id:" />
+                <TextBox x:Name="txtId" 
+                                      Text="{Binding Path=Id, Mode=OneWay}"
+             DataContext="{Binding ElementName=lsProduct, Path=SelectedItem}"
+                         Margin="0,0,0,5" />
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <Label Content="Vehicle Type:" />
+                <TextBox x:Name="txtVihicle"
+                                      Text="{Binding Path=VehicleType, Mode=OneWay}"
+             DataContext="{Binding ElementName=lsProduct, Path=SelectedItem}"
+                         Margin="0,0,0,5" />
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <Label Content="CO:" />
+                <TextBox x:Name="txtCo"
+                                      Text="{Binding Path=Co, Mode=OneWay}"
+             DataContext="{Binding ElementName=lsProduct, Path=SelectedItem}"
+                         Margin="0,0,0,5" />
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <Label Content="HC:" />
+                <TextBox x:Name="txtHc"
+                                      Text="{Binding Path=Hc, Mode=OneWay}"
+             DataContext="{Binding ElementName=lsProduct, Path=SelectedItem}"
+                         Margin="0,0,0,5" />
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <Label Content="NOx:" />
+                <TextBox x:Name="txtNOx"
+                                      Text="{Binding Path=Nox, Mode=OneWay}"
+             DataContext="{Binding ElementName=lsProduct, Path=SelectedItem}"
+             Margin="0,0,0,5" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+                <Button Name="btnSave" Content="Save" Width="100" Margin="5" Click="btnSave_Click"></Button>
+                <Button Name="btnUpdate" Content="Update" Width="105" Margin="5" Click="btnUpdate_Click"></Button>
+            </StackPanel>
+            <StackPanel>
+                <Button Name="btnRefresh" Content="Refresh" Width="105" Margin="5" Click="btnRefresh_Click" Height="22"></Button>
+            </StackPanel>
+        </StackPanel>
+
+        <ListView Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Name="lsProduct" Margin="10,10,-28,10">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Path= Id}" Width="Auto"/>
+                    <GridViewColumn Header="VehicleType" DisplayMemberBinding="{Binding Path= VehicleType}" Width="Auto"/>
+                    <GridViewColumn Header="Co" DisplayMemberBinding="{Binding Path= Co}" Width="Auto"/>
+                    <GridViewColumn Header="Hc" DisplayMemberBinding="{Binding Path= Hc}" Width="Auto"/>
+                    <GridViewColumn Header="Nox" DisplayMemberBinding="{Binding Path= Nox}" Width="Auto" />
+                    <GridViewColumn Header="Thời gian" DisplayMemberBinding="{Binding Path= Date}" Width="Auto" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>
