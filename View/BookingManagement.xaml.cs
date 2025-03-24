@@ -9,7 +9,7 @@ using System.Windows.Controls;
 
 namespace Project212.View
 {
-    public partial class BookingManagement : Page
+    public partial class BookingManagement : UserControl
     {
         private ObservableCollection<BookingViewModel> Bookings;
         private readonly Prn212AssignmentContext _context;
@@ -27,12 +27,10 @@ namespace Project212.View
         {
             try
             {
-                // Clear any existing selection in the ListView
                 dgBookings.Items.Clear();
                 dgBookings.SelectedItem = null;
                 dgBookings.SelectedIndex = -1;
 
-                // Load data
                 var rs = _context.Timetables
                             .Select(b => new BookingViewModel
                             {

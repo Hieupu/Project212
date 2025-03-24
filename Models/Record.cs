@@ -28,4 +28,6 @@ public partial class Record
     public virtual Timetable Time { get; set; } = null!;
 
     public virtual Vehicle Vehicle { get; set; } = null!;
+
+    public string ResultText => Result ? "Đạt" : "Không đạt";
 }

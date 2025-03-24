@@ -54,7 +54,7 @@
                         <DataGridTextColumn Width="*" Header="Khung gầm" Binding="{Binding Chassis}"/>
                         <DataGridTextColumn Width="*" Header="Mẫu xe" Binding="{Binding Model}"/>
                         <DataGridTextColumn Width="*" Header="Biển số" Binding="{Binding Plate}"/>
-                        <DataGridTextColumn Width="*" Header="Dofr" Binding="{Binding Dofr}"/>
+                        <DataGridTextColumn Width="*" Header="Dom" Binding="{Binding Dom}"/>
 
                     </DataGrid.Columns>
                 </DataGrid>

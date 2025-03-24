@@ -1,4 +1,5 @@
 ﻿using Project212.Models;
+using Project212.View;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -38,30 +39,40 @@ namespace Project212
                 AdminPanel.Visibility = Visibility.Visible;
                 UserPanel.Visibility = Visibility.Collapsed;
                 PolicePanel.Visibility = Visibility.Collapsed;
+                ReceptionistPanel.Visibility = Visibility.Collapsed;
+                EngineerPanel.Visibility = Visibility.Collapsed;
             }
             else if (role.Trim() == "customer")
             {
                 UserPanel.Visibility = Visibility.Visible;
                 AdminPanel.Visibility = Visibility.Collapsed;
                 PolicePanel.Visibility = Visibility.Collapsed;
+                ReceptionistPanel.Visibility = Visibility.Collapsed;
+                EngineerPanel.Visibility = Visibility.Collapsed;
             }
             else if (role.Trim() == "police")
             {
                 UserPanel.Visibility = Visibility.Collapsed;
                 AdminPanel.Visibility = Visibility.Collapsed;
                 PolicePanel.Visibility = Visibility.Visible;
+                ReceptionistPanel.Visibility = Visibility.Collapsed;
+                EngineerPanel.Visibility = Visibility.Collapsed;
             }
             else if (role.Trim() == "receptionist")
             {
-                UserPanel.Visibility = Visibility.Visible;
+                UserPanel.Visibility = Visibility.Collapsed;
                 AdminPanel.Visibility = Visibility.Collapsed;
                 PolicePanel.Visibility = Visibility.Collapsed;
+                ReceptionistPanel.Visibility = Visibility.Visible;
+                EngineerPanel.Visibility = Visibility.Collapsed;
             }
             else if (role.Trim() == "engineer")
             {
-                UserPanel.Visibility = Visibility.Visible;
+                UserPanel.Visibility = Visibility.Collapsed;
                 AdminPanel.Visibility = Visibility.Collapsed;
                 PolicePanel.Visibility = Visibility.Collapsed;
+                ReceptionistPanel.Visibility = Visibility.Collapsed;
+                EngineerPanel.Visibility = Visibility.Visible;
             }
             else
             {
@@ -119,23 +130,50 @@ namespace Project212
             policeView.Height = ContainerPolice.ActualHeight;
             ContainerPolice.Child = policeView;
         }
-    private void History_Click(object sender, RoutedEventArgs e)
-    {
-        History historyControl = new History();
-
-        historyControl.Width = ContainerUser.ActualWidth;
-        historyControl.Height = ContainerUser.ActualHeight;
-
-        ContainerUser.Child = historyControl;
-    }
-
-    private void BookLich_Click(object sender, RoutedEventArgs e)
+        private void History_Click(object sender, RoutedEventArgs e)
         {
-            BookLich bookLichControl = new BookLich();
-            bookLichControl.Width = ContainerUser.ActualWidth;
-            bookLichControl.Height = ContainerUser.ActualHeight;
+            History historyControl = new History();
 
-            ContainerUser.Child = bookLichControl;
+            historyControl.Width = ContainerUser.ActualWidth;
+            historyControl.Height = ContainerUser.ActualHeight;
+
+            ContainerUser.Child = historyControl;
+        }
+
+        private void BookLich_Click(object sender, RoutedEventArgs e)
+            {
+                BookLich bookLichControl = new BookLich();
+                bookLichControl.Width = ContainerUser.ActualWidth;
+                bookLichControl.Height = ContainerUser.ActualHeight;
+
+                ContainerUser.Child = bookLichControl;
+            }
+
+        private void BookingManagement_Click(object sender, RoutedEventArgs e)
+        {
+            BookingManagement bookingManagement = new BookingManagement();
+            bookingManagement.Width = ContainerReceptionist.ActualWidth;
+            bookingManagement.Height = ContainerReceptionist.ActualHeight;
+
+            ContainerReceptionist.Child = bookingManagement;
+        }
+
+        private void RecordManagement_Click(object sender, RoutedEventArgs e)
+        {
+            RecordManagement recordManagement = new RecordManagement();
+            recordManagement.Width = ContainerEngineer.ActualWidth;
+            recordManagement.Height = ContainerEngineer.ActualHeight;
+
+            ContainerEngineer.Child = recordManagement;
+        }
+
+        private void StandardManagement_Click(object sender, RoutedEventArgs e)
+        {
+            StandardManagement standardManagement = new StandardManagement();
+            standardManagement.Width = ContainerEngineer.ActualWidth;
+            standardManagement.Height = ContainerEngineer.ActualHeight;
+
+            ContainerEngineer.Child = standardManagement;
         }
 
         private void ButLogOut_Click(object sender, RoutedEventArgs e)

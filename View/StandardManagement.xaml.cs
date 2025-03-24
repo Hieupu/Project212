@@ -19,7 +19,7 @@ namespace Project212.View
     /// <summary>
     /// Interaction logic for StandardManagement.xaml
     /// </summary>
-    public partial class StandardManagement : Window
+    public partial class StandardManagement : UserControl
     {
         private readonly Prn212AssignmentContext _context;
         public ObservableCollection<StandardViewModel> Standards { get; set; }

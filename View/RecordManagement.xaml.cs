@@ -22,7 +22,7 @@ namespace Project212.View
     /// <summary>
     /// Interaction logic for RecordManagement.xaml
     /// </summary>
-    public partial class RecordManagement : Window
+    public partial class RecordManagement : UserControl
     {
         private readonly Prn212AssignmentContext _context;
         public RecordManagement()
@@ -94,7 +94,9 @@ namespace Project212.View
                     MessageBox.Show("Invalid numeric values for CO, HC, or NOx.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
+
                 var vehi = _context.Vehicles.FirstOrDefault(x => x.Id == int.Parse(txtVihicle.Text));
+
                 if (vehi == null)
                 {
                     MessageBox.Show("Invalid Vehicle ID. Please enter a valid number for Vehicle ID.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Warning);

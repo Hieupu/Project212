@@ -1,8 +1,6 @@
-﻿<Page x:Class="Project212.View.BookingManagement"
+﻿<UserControl x:Class="Project212.View.BookingManagement"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      
-      Title="BookingManagement">
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Grid Background="White">
         <Grid.RowDefinitions>
@@ -47,4 +45,4 @@
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
-</Page>
+</UserControl>

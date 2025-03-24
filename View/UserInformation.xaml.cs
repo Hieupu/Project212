@@ -82,14 +82,13 @@ namespace Project212
                 currentCitizen = citizenDAO.GetCitizenByAccountId(currentAccount.Id);
                 if (currentCitizen != null)
                 {
-                    // Display citizen information in the labels
                     tbTen.Text = currentCitizen.Name;
                     dtNgaysinh.SelectedDate = currentCitizen.Dob.HasValue
     ? currentCitizen.Dob.Value.ToDateTime(TimeOnly.MinValue)
     : null;
 
                     tbDiachi.Text = currentCitizen.Address;
-                    tbPhone.Text = currentCitizen.Phone.ToString();
+                    tbPhone.Text = currentCitizen.Phone;
                     tbMail.Text = currentCitizen.Mail;
                 }
             }
@@ -118,7 +117,6 @@ namespace Project212
         {
             try
             {
-                // Validate input data
                 if (string.IsNullOrWhiteSpace(tbTen.Text) ||
                     dtNgaysinh.SelectedDate == null ||
                     string.IsNullOrWhiteSpace(tbDiachi.Text) ||
@@ -129,20 +127,18 @@ namespace Project212
                     return;
                 }
 
-                // Validate phone number
                 if (!int.TryParse(tbPhone.Text, out int phoneNumber))
                 {
                     MessageBox.Show("Số điện thoại không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                // Create a new Citizen object
                 Citizen newCitizen = new Citizen
                 {
                     Name = tbTen.Text,
                     Dob = DateOnly.FromDateTime(dtNgaysinh.SelectedDate.Value),
                     Address = tbDiachi.Text,
-                    Phone = phoneNumber,
+                    Phone = tbPhone.Text,
                     Mail = tbMail.Text,
                     AccId = currentAccount.Id
                 };
@@ -152,18 +148,14 @@ namespace Project212
                     context.Citizens.Add(newCitizen);
                     context.SaveChanges();
 
-                    // Update the current citizen reference
                     currentCitizen = newCitizen;
 
                     MessageBox.Show("Thêm thông tin thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                    // Reload user information
                     LoadUserInformation();
 
-                    // Disable editing fields
                     DisableEditFields();
 
-                    // Enable Update button instead of Add for future edits
                     btnAdd.IsEnabled = false;
                 }
             }
@@ -177,7 +169,6 @@ namespace Project212
         {
             try
             {
-                // Validate input data
                 if (string.IsNullOrWhiteSpace(tbTen.Text) ||
                     dtNgaysinh.SelectedDate == null ||
                     string.IsNullOrWhiteSpace(tbDiachi.Text) ||
@@ -188,18 +179,16 @@ namespace Project212
                     return;
                 }
 
-                // Validate phone number
                 if (!int.TryParse(tbPhone.Text, out int phoneNumber))
                 {
                     MessageBox.Show("Số điện thoại không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                // Update citizen data
                 currentCitizen.Name = tbTen.Text;
                 currentCitizen.Dob = DateOnly.FromDateTime(dtNgaysinh.SelectedDate.Value);
                 currentCitizen.Address = tbDiachi.Text;
-                currentCitizen.Phone = phoneNumber;
+                currentCitizen.Phone = tbPhone.Text ;
                 currentCitizen.Mail = tbMail.Text;
 
                 bool result = citizenDAO.UpdateCitizen(currentCitizen);
@@ -207,10 +196,8 @@ namespace Project212
                 {
                     MessageBox.Show("Cập nhật thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                    // Reload user information to display updated data
                     LoadUserInformation();
 
-                    // Disable all fields after successful update
                     DisableEditFields();
                 }
                 else

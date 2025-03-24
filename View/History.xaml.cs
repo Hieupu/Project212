@@ -77,18 +77,16 @@ namespace Project212
             {
                 var citizenId = _context.Citizens.Where(c => c.AccId == _currentUserId1).Select(c => c.Id).FirstOrDefault();
 
-                // Then find vehicles for this citizen
-                var userVehicles = _context.Vehicles
+                List<int> a = _context.Vehicles
                     .Where(v => v.CitizenId == citizenId)
                     .Select(v => v.Id)
                     .ToList();
 
                 var userRecords = _context.Records
-    .Where(r => userVehicles.Contains(r.VehicleId)) // Lọc chỉ các xe của tài khoản
-    .OrderByDescending(r => r.VehicleId) // Sắp xếp theo ID xe giảm dần
-    .ToList();
+                .Where(r => a.Contains(r.VehicleId)) // Lọc chỉ các xe của tài khoản
+                .OrderByDescending(r => r.VehicleId) // Sắp xếp theo ID xe giảm dần
+                .ToList();
 
-                // Kiểm tra số lượng bản ghi lấy được
                 MessageBox.Show($"Số bản ghi lấy được: {userRecords.Count}");
 
                 if (userRecords.Count == 0)

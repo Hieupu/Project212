@@ -13,7 +13,7 @@ public partial class Citizen
 
     public string? Address { get; set; }
 
-    public int? Phone { get; set; }
+    public String? Phone { get; set; }
 
     public string? Mail { get; set; }
 

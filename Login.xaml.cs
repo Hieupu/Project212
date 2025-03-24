@@ -21,9 +21,9 @@ namespace Project212
     public partial class Login : Window
     {
         readonly Prn212AssignmentContext context;
-        private const int maxAttempts = 5;  // Hằng số số lần nhập sai tối đa
-        private int attemptCount = 0;       // Biến đếm số lần nhập sai
-        private static DateTime? lockoutEndTime = null; // Biến lưu thời gian mở khóa
+        private const int maxAttempts = 5; 
+        private int attemptCount = 0;       
+        private static DateTime? lockoutEndTime = null; 
         private bool isRegisterMode = false;
 
         public Login()
@@ -50,7 +50,6 @@ namespace Project212
             if (isRegisterMode)
             {
                 string CitizenID = CitizenIDBox.Text;
-                
 
                 if (context.Accounts.Any(a => a.Username == username))
                 {
@@ -66,30 +65,27 @@ namespace Project212
                 context.Citizens.Add(newCitizen);
                 context.SaveChanges();
                 MessageBox.Show("Registration successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
             }
 
-            // Kiểm tra username có độ dài hợp lệ không (từ 2 đến 10 ký tự)
             if (username.Length < 2 || username.Length > 10)
             {
                 MessageBox.Show("Username must be between 2 and 10 characters.");
                 return;
             }
 
-            //check khoang trắng username
             if (username.Contains(" "))
             {
                 MessageBox.Show("Username must not contain spaces.");
                 return;
             }
 
-            // Kiểm tra username có chứa ký tự đặc biệt không
             if (!IsValidUsername(username))
             {
                 MessageBox.Show("Username must not contain special characters.");
                 return;
             }
 
-            // Kiểm tra nếu tài khoản đang bị khóa
             if (lockoutEndTime.HasValue && DateTime.Now < lockoutEndTime.Value)
             {
                 TimeSpan remainingTime = lockoutEndTime.Value - DateTime.Now;
@@ -102,27 +98,22 @@ namespace Project212
 
             if (account != null)
             {
-                attemptCount = 0; // Reset số lần nhập sai nếu đăng nhập thành công
-                lockoutEndTime = null; // Hủy bỏ khóa nếu có
+                attemptCount = 0; 
+                lockoutEndTime = null; 
 
-                UserSession.CurrentUser = account;      //lưu tk trên session
-
-                var newAccount = new Account { Username = username, Password = password, Role = "customer" };
-                context.Accounts.Add(newAccount);
-                context.SaveChanges();
+                UserSession.CurrentUser = account; 
 
                 Homepage homepage = new Homepage(account);
                 this.Close();
                 homepage.Show();
-                
             }
             else
             {
-                attemptCount++; // Tăng số lần nhập sai
+                attemptCount++; 
 
                 if (attemptCount >= maxAttempts)
                 {
-                    lockoutEndTime = DateTime.Now.AddMinutes(1); // Khóa trong 5 phút
+                    lockoutEndTime = DateTime.Now.AddMinutes(5); 
                     MessageBox.Show("Too many failed login attempts. Your account is locked for 5 minutes.");
                 }
                 else
@@ -131,8 +122,6 @@ namespace Project212
                 }
             }
         }
-
-        // Hàm kiểm tra username không chứa ký tự đặc biệt
         private bool IsValidUsername(string username)
         {
             return Regex.IsMatch(username, "^[a-zA-Z0-9]+$");
