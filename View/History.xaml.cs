@@ -34,18 +34,11 @@ namespace Project212
             LoadDatagridResult();
         }
 
+        //load thông báo chung
         private void LoadNotifications()
         {
             try
             {
-                //// Hiển thị tất cả thông báo (để kiểm tra)
-                //var allNotifications = _context.Notices.OrderByDescending(n => n.SentDate).ToList();
-                //MessageBox.Show($"Total notifications in system: {allNotifications.Count}");
-
-                //// Sau đó lọc theo người dùng
-                //var userNotifications = allNotifications.Where(n => n.AccId == _currentUserId1).ToList();
-                //MessageBox.Show($"User notifications: {userNotifications.Count}");
-
                 var userNotifications = _context.Notices.Where(n => n.AccId == _currentUserId1).ToList();
 
                 var allNotifications = userNotifications.OrderByDescending(n => n.SentDate).ToList();
@@ -62,7 +55,7 @@ namespace Project212
         {
             if (dgNotifications.SelectedItem is Notice selectedNotice)
             {
-                // Hiển thị chi tiết thông báo
+                
                 tbDetail.Text = selectedNotice.Detail;
                 tbSentDate.Text = selectedNotice.SentDate.ToString("dd/MM/yyyy HH:mm");
 
@@ -72,7 +65,7 @@ namespace Project212
                     selectedNotice.IsRead = true;
                     _context.Notices.Update(selectedNotice);
                     _context.SaveChanges();
-                    LoadNotifications(); // Cập nhật lại danh sách
+                    LoadNotifications(); 
                 }
             }
         }
@@ -88,11 +81,9 @@ namespace Project212
                     .ToList();
 
                 var userRecords = _context.Records
-                .Where(r => a.Contains(r.VehicleId)) // Lọc chỉ các xe của tài khoản
-                .OrderByDescending(r => r.VehicleId) // Sắp xếp theo ID xe giảm dần
+                .Where(r => a.Contains(r.VehicleId)) 
+                .OrderByDescending(r => r.VehicleId) 
                 .ToList();
-
-                //MessageBox.Show($"Số bản ghi lấy được: {userRecords.Count}");
 
                 if (userRecords.Count == 0)
                     {
@@ -119,7 +110,7 @@ namespace Project212
 
         private void btnExportTxt_Click(object sender, RoutedEventArgs e)
         {
-            // Kiểm tra xem có dòng nào được chọn không
+            
             if (DgResult.SelectedItem == null)
             {
                 MessageBox.Show("Vui lòng chọn một bản ghi để xuất", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -155,6 +146,7 @@ namespace Project212
             }
         }
 
+        // validate font chữ tiếng việt
         private static BaseFont LoadFont()
         {
             string fontPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "times.ttf");
@@ -162,6 +154,7 @@ namespace Project212
         }
 
 
+        // hàm xuất pdf
         private void btnExportPdf_Click(object sender, RoutedEventArgs e)
         {
             if (DgResult.SelectedItem == null)
