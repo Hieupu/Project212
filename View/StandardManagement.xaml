@@ -1,12 +1,11 @@
-﻿<Window x:Class="Project212.View.StandardManagement"
+﻿<UserControl x:Class="Project212.View.StandardManagement"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project212.View"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen"
-        Title="StandardManagement" Height="450" Width="800">
+        Height="450" Width="800">
     <Grid Margin="0,0,40,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -26,13 +25,7 @@
              DataContext="{Binding ElementName=lsProduct, Path=SelectedItem}"
                          Margin="0,0,0,5" />
             </StackPanel>
-            <StackPanel Orientation="Vertical">
-                <Label Content="Vehicle Type:" />
-                <TextBox x:Name="txtVihicle"
-                                      Text="{Binding Path=VehicleType, Mode=OneWay}"
-             DataContext="{Binding ElementName=lsProduct, Path=SelectedItem}"
-                         Margin="0,0,0,5" />
-            </StackPanel>
+
             <StackPanel Orientation="Vertical">
                 <Label Content="CO:" />
                 <TextBox x:Name="txtCo"
@@ -67,7 +60,6 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Path= Id}" Width="Auto"/>
-                    <GridViewColumn Header="VehicleType" DisplayMemberBinding="{Binding Path= VehicleType}" Width="Auto"/>
                     <GridViewColumn Header="Co" DisplayMemberBinding="{Binding Path= Co}" Width="Auto"/>
                     <GridViewColumn Header="Hc" DisplayMemberBinding="{Binding Path= Hc}" Width="Auto"/>
                     <GridViewColumn Header="Nox" DisplayMemberBinding="{Binding Path= Nox}" Width="Auto" />
@@ -76,4 +68,4 @@
             </ListView.View>
         </ListView>
     </Grid>
-</Window>
+</UserControl>

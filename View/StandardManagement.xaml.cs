@@ -19,7 +19,7 @@ namespace Project212.View
     /// <summary>
     /// Interaction logic for StandardManagement.xaml
     /// </summary>
-    public partial class StandardManagement : Window
+    public partial class StandardManagement : UserControl
     {
         private readonly Prn212AssignmentContext _context;
         public ObservableCollection<StandardViewModel> Standards { get; set; }
@@ -50,7 +50,6 @@ namespace Project212.View
             {
                 // Validate the fields before parsing
                 if (string.IsNullOrWhiteSpace(txtId.Text) ||
-                    string.IsNullOrWhiteSpace(txtVihicle.Text) ||
                     string.IsNullOrWhiteSpace(txtCo.Text) ||
                     string.IsNullOrWhiteSpace(txtHc.Text) ||
                     string.IsNullOrWhiteSpace(txtNOx.Text))
@@ -66,12 +65,7 @@ namespace Project212.View
                     return;
                 }
 
-                // Validate if the VehicleType can be parsed as a string (or use a different validation depending on its data type)
-                if (!int.TryParse(txtVihicle.Text, out int vehicleType))
-                {
-                    MessageBox.Show("Invalid Id. Please enter a valid integer.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
+
 
                 // Validate if the CO, HC, and NOx values are valid floats
                 if (!float.TryParse(txtCo.Text, out float co))
@@ -96,7 +90,6 @@ namespace Project212.View
                 var standard = new Standard()
                 {
                     Id = id,
-                    VehicleType = vehicleType,  // Assuming VehicleType is a string
                     Co = co,
                     Hc = hc,
                     Nox = nox,
@@ -108,7 +101,6 @@ namespace Project212.View
 
                 MessageBox.Show("Data Saved Successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 txtId.Clear();
-                txtVihicle.Clear();
                 txtCo.Clear();
                 txtHc.Clear();
                 txtNOx.Clear();
@@ -127,7 +119,6 @@ namespace Project212.View
             {
                 // Validate the fields before parsing
                 if (string.IsNullOrWhiteSpace(txtId.Text) ||
-                    string.IsNullOrWhiteSpace(txtVihicle.Text) ||
                     string.IsNullOrWhiteSpace(txtCo.Text) ||
                     string.IsNullOrWhiteSpace(txtHc.Text) ||
                     string.IsNullOrWhiteSpace(txtNOx.Text))
@@ -143,12 +134,7 @@ namespace Project212.View
                     return;
                 }
 
-                // Validate if the VehicleType can be parsed as a string (or use a different validation depending on its data type)
-                if (!int.TryParse(txtVihicle.Text, out int vehicleType))
-                {
-                    MessageBox.Show("Invalid Id. Please enter a valid integer.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
+
 
                 // Validate if the CO, HC, and NOx values are valid floats
                 if (!float.TryParse(txtCo.Text, out float co))
@@ -186,7 +172,6 @@ namespace Project212.View
 
                 MessageBox.Show("Data Update Successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 txtId.Clear();
-                txtVihicle.Clear();
                 txtCo.Clear();
                 txtHc.Clear();
                 txtNOx.Clear();
