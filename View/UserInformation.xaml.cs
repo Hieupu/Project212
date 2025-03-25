@@ -28,7 +28,7 @@ namespace Project212
         private readonly CitizenDAO citizenDAO;
         private Citizen currentCitizen;
         private Account currentAccount;
-        private VehicleDAO vehicleDAO;
+        private readonly VehicleDAO vehicleDAO;
         
 
         public UserInformation()
