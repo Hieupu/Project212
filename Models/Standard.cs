@@ -7,8 +7,6 @@ public partial class Standard
 {
     public int Id { get; set; }
 
-    public int VehicleType { get; set; }
-
     public double Co { get; set; }
 
     public double Hc { get; set; }

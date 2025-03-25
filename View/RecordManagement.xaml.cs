@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Project212.DAO;
 using Project212.Models;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static Project212.View.BookingManagement;
 
 namespace Project212.View
@@ -25,9 +27,13 @@ namespace Project212.View
     public partial class RecordManagement : UserControl
     {
         private readonly Prn212AssignmentContext _context;
+        private readonly CitizenDAO citizenDAO;
+        private readonly VehicleDAO vehicleDAO;
         public RecordManagement()
         {
             _context = new Prn212AssignmentContext();
+            citizenDAO = new CitizenDAO();
+            vehicleDAO = new VehicleDAO();
             InitializeComponent();
             LoadData();
         }
@@ -42,7 +48,7 @@ namespace Project212.View
                 {
                     Id = b.Id,
                     StationName = _context.InspectionStations.FirstOrDefault(x => x.Id == b.InspectionId).Name,
-                    User = _context.Citizens.FirstOrDefault(x => b.AccId.Equals(x.Id)).Name,
+                    User = _context.Citizens.FirstOrDefault(x => b.AccId.ToString() == x.Id).Name,
                     AppointmentDate = b.InspectTime.ToString("yyyy-MM-dd HH:mm"),
                     Status = b.Status,
                     RecordStatus = _context.Records.Any(x => x.TimeId == b.Id)
@@ -75,9 +81,8 @@ namespace Project212.View
         {
             try
             {
-                // Validate inputs
                 if (
-                    string.IsNullOrWhiteSpace(txtVihicle.Text) ||
+                    string.IsNullOrWhiteSpace(cbType.Text) ||
                     string.IsNullOrWhiteSpace(txtCo.Text) ||
                     string.IsNullOrWhiteSpace(txtHc.Text) ||
                     string.IsNullOrWhiteSpace(txtNOx.Text) ||
@@ -87,7 +92,6 @@ namespace Project212.View
                     return;
                 }
 
-                // Parse and validate the input
 
                 if (!double.TryParse(txtCo.Text, out double co) || !double.TryParse(txtHc.Text, out double hc) || !double.TryParse(txtNOx.Text, out double nox))
                 {
@@ -95,26 +99,17 @@ namespace Project212.View
                     return;
                 }
 
-                var vehi = _context.Vehicles.FirstOrDefault(x => x.Id == int.Parse(txtVihicle.Text));
 
-                if (vehi == null)
-                {
-                    MessageBox.Show("Invalid Vehicle ID. Please enter a valid number for Vehicle ID.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
 
-                // Get the selected vehicle type (assuming it's an integer)
-                var selectedVehicleType = (int)cbType.SelectedValue;
                 var time = int.Parse(txtTimeId.Text);
-                // Create the new record object
                 var newRecord = new Record()
                 {
-                    VehicleId = int.Parse(txtVihicle.Text),
+                    StandardId = int.Parse(cbType.Text),
+                    VehicleId = _context.Vehicles.FirstOrDefault(x => x.Model == txtVehicle.Text).Id,
                     Co = co,
                     Hc = hc,
                     Nox = nox,
                     Note = txtNote.Text,
-                    StandardId = selectedVehicleType,
                     TimeId = int.Parse(txtTimeId.Text),
                     Result = true,
                 };
@@ -125,26 +120,22 @@ namespace Project212.View
                     return;
                 }
 
-                // Compare the values and set Result to 0 if the Record's values are higher
                 if (newRecord.Co > standard.Co || newRecord.Hc > standard.Hc || newRecord.Nox > standard.Nox)
                 {
-                    newRecord.Result = false;  // The record's value is higher than the standard's value
+                    newRecord.Result = false;
                 }
 
-                // Save the new record to the database (or ObservableCollection)
-                _context.Records.Add(newRecord);  // Assuming _context is your DbContext
+                _context.Records.Add(newRecord);
                 _context.SaveChanges();
 
-                // Optionally, update the ListView
-                LoadData(); // Load data method to refresh the ListView
+                LoadData();
                 SentNotice(newRecord.Result, time);
-                // Clear the form fields
-                txtVihicle.Clear();
+
                 txtCo.Clear();
                 txtHc.Clear();
                 txtNOx.Clear();
                 txtNote.Clear();
-                cbType.SelectedIndex = -1; // Reset ComboBox
+                cbType.SelectedIndex = -1;
                 LoadData();
 
                 MessageBox.Show("Record added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -157,7 +148,15 @@ namespace Project212.View
 
         private void dgBookings_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            if (lsProduct.SelectedItem != null)
+            {
+                var selectedRow = (RecordViewModel)lsProduct.SelectedItem;
+                var booking = _context.Timetables.Include(x => x.Acc).Include(x => x.Vehicle).FirstOrDefault(x => x.Id == selectedRow.Id);
+                if (booking != null)
+                {
+                    txtVehicle.Text = booking.Vehicle.Model;
+                }
+            }
         }
         private void SentNotice(bool result, int time)
         {

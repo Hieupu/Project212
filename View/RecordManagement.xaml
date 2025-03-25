@@ -21,8 +21,7 @@
             <Label Content="Record" FontSize="20" FontWeight="Bold"></Label>
             <StackPanel Orientation="Vertical">
                 <Label Content="Vehicle:" />
-                <TextBox x:Name="txtVihicle"
-                         Margin="0,0,0,5" />
+                <TextBox Grid.Row="5" Grid.Column="1" Name="txtVehicle" IsReadOnly="True" Width="250" />
             </StackPanel>
             <StackPanel Orientation="Vertical">
                 <Label Content="CO:" />
@@ -46,7 +45,7 @@
             </StackPanel>
             <StackPanel Orientation="Vertical">
                 <Label Content="Standard:" />
-                <ComboBox x:Name="cbType" DisplayMemberPath="Id" SelectedValuePath="Id"
+                <ComboBox x:Name="cbType" DisplayMemberPath="Id" SelectedValuePath="Date, StringFormat='yyyy-MM-dd HH:mm"
              Margin="0,0,0,5">
                 </ComboBox>
             </StackPanel>
@@ -62,7 +61,7 @@
             </StackPanel>
         </StackPanel>
 
-        <ListView Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Name="lsProduct" Margin="10,10,-28,10">
+        <ListView Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Name="lsProduct" Margin="10,10,-28,10" SelectionChanged="dgBookings_SelectionChanged">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Path= Id}" Width="Auto"/>
