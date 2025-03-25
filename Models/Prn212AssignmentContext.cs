@@ -35,7 +35,7 @@ public partial class Prn212AssignmentContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("server =localhost; database = PRN212_Assignment;uid=sa;pwd=1234;TrustServerCertificate=True");
+        => optionsBuilder.UseSqlServer("Server=LAPTOP-74R02EAR\\MINHPHAM;Database=PRN212_Assignment;Uid=sa;Pwd=123;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -61,7 +61,7 @@ public partial class Prn212AssignmentContext : DbContext
             entity.ToTable("Citizen");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
+                .HasMaxLength(12)
                 .HasColumnName("id");
             entity.Property(e => e.AccId).HasColumnName("accID");
             entity.Property(e => e.Address)
@@ -74,7 +74,9 @@ public partial class Prn212AssignmentContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .HasColumnName("name");
-            entity.Property(e => e.Phone).HasColumnName("phone");
+            entity.Property(e => e.Phone)
+                .HasMaxLength(12)
+                .HasColumnName("phone");
 
             entity.HasOne(d => d.Acc).WithMany(p => p.Citizens)
                 .HasForeignKey(d => d.AccId)
@@ -200,6 +202,7 @@ public partial class Prn212AssignmentContext : DbContext
                 .HasMaxLength(10)
                 .IsFixedLength()
                 .HasColumnName("status");
+            entity.Property(e => e.VehicleId).HasColumnName("vehicleID");
 
             entity.HasOne(d => d.Acc).WithMany(p => p.Timetables)
                 .HasForeignKey(d => d.AccId)
@@ -210,6 +213,10 @@ public partial class Prn212AssignmentContext : DbContext
                 .HasForeignKey(d => d.InspectionId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Timetable_InspectionStations");
+
+            entity.HasOne(d => d.Vehicle).WithMany(p => p.Timetables)
+                .HasForeignKey(d => d.VehicleId)
+                .HasConstraintName("FK_Timetable_Vehicle");
         });
 
         modelBuilder.Entity<Vehicle>(entity =>
@@ -225,7 +232,9 @@ public partial class Prn212AssignmentContext : DbContext
                 .HasMaxLength(12)
                 .IsFixedLength()
                 .HasColumnName("chassis");
-            entity.Property(e => e.CitizenId).HasColumnName("citizenID");
+            entity.Property(e => e.CitizenId)
+                .HasMaxLength(12)
+                .HasColumnName("citizenID");
             entity.Property(e => e.Color)
                 .HasMaxLength(50)
                 .HasColumnName("color");

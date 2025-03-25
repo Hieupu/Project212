@@ -89,7 +89,7 @@ namespace Project212.View
 
                 // Parse and validate the input
 
-                if (!double.TryParse(txtCo.Text, out double co) || !double.TryParse(txtHc.Text, out double hc) || !double.TryParse(txtNOx.Text, out double nox))
+                if (!decimal.TryParse(txtCo.Text, out decimal co) || !decimal.TryParse(txtHc.Text, out decimal hc) || !decimal.TryParse(txtNOx.Text, out decimal nox))
                 {
                     MessageBox.Show("Invalid numeric values for CO, HC, or NOx.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
@@ -126,7 +126,7 @@ namespace Project212.View
                 }
 
                 // Compare the values and set Result to 0 if the Record's values are higher
-                if (newRecord.Co > standard.Co || newRecord.Hc > standard.Hc || newRecord.Nox > standard.Nox)
+                if (newRecord.Co > (decimal)standard.Co || newRecord.Hc > (decimal)standard.Hc || newRecord.Nox > (decimal)standard.Nox)
                 {
                     newRecord.Result = false;  // The record's value is higher than the standard's value
                 }

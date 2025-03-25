@@ -27,17 +27,23 @@ namespace Project212
         private DateTime _selectedInspectTime;
         private int _selectedStationId; //id của "TRẠM KIỂM ĐỊNH"
         private int _currentUserId;
+        private Vehicle _vehicle;
+        private Citizen currentCitizen;
+        private readonly VehicleDAO vehicleDAO;
         public BookLich()
         {
             _context = new Prn212AssignmentContext();
             _currentUserId = UserSession.CurrentUser?.Id ?? -1;
             //MessageBox.Show($"Current User ID: {_currentUserId}");
             _timetableDAO = new TimetableDAO(_context);
+            vehicleDAO = new VehicleDAO();
+            _vehicle = new Vehicle();
             InitializeComponent();
             LoadComboboxRoles();
             LoadTimetableHistory();
             LoadComboboxCoso();
             FilterTimetableHistory();
+            LoadVehicle();
         }
 
         //Load dữ liệu "TRẠM KIỂM ĐỊNH"
@@ -54,6 +60,24 @@ namespace Project212
             else
             {
                 cbRoles1.ItemsSource = null; // Tránh lỗi khi danh sách rỗng
+            }
+        }
+        void LoadVehicle()
+        {
+            currentCitizen = _context.Citizens.FirstOrDefault(c => c.AccId == _currentUserId);
+            
+
+            var vehicle = vehicleDAO.GetVehiclesByCitizenId(currentCitizen.Id);
+            if (vehicle != null && vehicle.Count > 0)
+            {
+                cbVehicle.ItemsSource = vehicle;
+                cbVehicle.DisplayMemberPath = "Model";
+                cbVehicle.SelectedValuePath = "Id";
+                cbVehicle.SelectedIndex = 0;
+            }
+            else
+            {
+                cbVehicle.ItemsSource = null; // Tránh lỗi khi danh sách rỗng
             }
         }
         void LoadComboboxCoso()
@@ -85,12 +109,13 @@ namespace Project212
         // nút "ĐẶT LỊCH"
         private void btnDatlich_Click(object sender, RoutedEventArgs e)
         {
-            if (cbRoles1.SelectedValue == null || dpThoigian.SelectedDate == null || cbHours.SelectedItem == null)
+            if (cbRoles1.SelectedValue == null || dpThoigian.SelectedDate == null || cbHours.SelectedItem == null || cbVehicle.SelectedValue == null)
             {
-                MessageBox.Show("Vui lòng chọn cơ sở, ngày và giờ kiểm định!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Vui lòng chọn xe của bạn, cơ sở, ngày và giờ kiểm định!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
+            int vehicleId = (int)cbVehicle.SelectedValue;
             int inspectionId = (int)cbRoles1.SelectedValue;
             DateTime gioihan = dpThoigian.SelectedDate.Value;
 
@@ -101,11 +126,20 @@ namespace Project212
                 return;
             }
 
+            bool hasVehicle = _context.Vehicles.Any(v => v.Id == _currentUserId);
+
+            if (!hasVehicle)
+            {
+                MessageBox.Show("Bạn chưa có xe, vui lòng thêm xe trước khi đặt lịch!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             DateTime selectedDate = dpThoigian.SelectedDate.Value;
             int selectedHour = int.Parse(((ComboBoxItem)cbHours.SelectedItem).Content.ToString());
             DateTime inspectTime = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, selectedHour, 0, 0);
+          
 
-            bool result = _timetableDAO.AddTimetable(inspectionId, _currentUserId, inspectTime);
+            bool result = _timetableDAO.AddTimetable(inspectionId, _currentUserId, inspectTime, vehicleId);
 
             if (result)
             {
@@ -122,37 +156,24 @@ namespace Project212
         //reload dữ liệu mới nhất
         private void LoadTimetableHistory()
         {
-            // Debug to confirm the current user ID
             int userId = UserSession.CurrentUser?.Id ?? -1;
 
-            // Check if current user ID matches what we expect
             if (_currentUserId != userId)
             {
-                // Update current user ID if it doesn't match
                 _currentUserId = userId;
-                //MessageBox.Show($"User ID mismatch corrected. Current ID: {_currentUserId}");
             }
 
-            // Check if there are any timetables for this user at all
-            var allTimetables = _context.Timetables.Where(t => t.AccId == _currentUserId).ToList();
-
-            if (allTimetables.Count == 0)
-            {
-                // No timetables found for this user
-                MessageBox.Show($"Không tìm thấy lịch trình cho ID người dùng: {_currentUserId}");
-                dgVehiclesLichsu.ItemsSource = null; // Clear the data grid
-                return;
-            }
-
-            // Proceed with loading timetables as before
+            // Use .Include() to eagerly load the Vehicle navigation property
             dgVehiclesLichsu.ItemsSource = _context.Timetables
+                .Include(t => t.Vehicle) // Include the Vehicle data
                 .Where(t => t.AccId == _currentUserId)
                 .Select(t => new
                 {
                     StationID = t.InspectionId,
                     StationName = t.Inspection.Name,
                     AppointmentDate = t.InspectTime,
-                    Status = t.Status
+                    Status = t.Status,
+                    VehicleModel = t.Vehicle != null ? t.Vehicle.Model : "Không xác định"
                 }).ToList();
         }
         private void FilterTimetableHistory()
@@ -186,7 +207,8 @@ namespace Project212
                         StationID = t.InspectionId,
                         StationName = t.Inspection.Name,
                         AppointmentDate = t.InspectTime,
-                        Status = t.Status
+                        Status = t.Status,
+                        VehicleModel = t.Vehicle != null ? t.Vehicle.Model : "Không xác định"
                     }).ToList();
             }
             catch (Exception ex)

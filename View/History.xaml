@@ -47,11 +47,11 @@
             </DataGrid>
         </Border>
 
-        <Label Grid.Row="3" Grid.Column="1" Content="Xuất file txt" HorizontalAlignment="Left" Width="76" Margin="51,17,0,13"/>
-        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,10">
-            <Button MinWidth="80" Margin="3" Width="10" Content="TxtFile" Name="btnExportTxt" HorizontalAlignment="Left" Click="btnExportTxt_Click" />
 
-        </StackPanel>
+
+        <Button Grid.Row="3" Grid.Column="1" MinWidth="80" Margin="116,22,0,12" Width="10" Content="Xuất txt" Name="btnExportTxt" HorizontalAlignment="Left" Click="btnExportTxt_Click" />
+        <Button Grid.Row="3" Grid.Column="1" MinWidth="80" Margin="10,22,0,12" Width="10" Content="Xuất pdf" Name="btnExportPdf" HorizontalAlignment="Left" Click="btnExportPdf_Click" />
+
         <Label Grid.Column="1" Content="Lịch Sử" FontSize="27" Margin="293,10,-261,0" FontFamily="Segoe UI Black" Foreground="#18A5A7" Grid.ColumnSpan="2" Grid.Row="3"/>
         <DataGrid Name="DgResult" AutoGenerateColumns="False" IsReadOnly="True" 
           SelectionMode="Single" Margin="20,0,23,0" Grid.Row="4" Grid.ColumnSpan="3">

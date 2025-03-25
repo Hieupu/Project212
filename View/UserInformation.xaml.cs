@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using Project212.DAO;
 using Project212.Models;
@@ -58,6 +59,7 @@ namespace Project212
                     diachi.Content = currentCitizen.Address ?? "Không có địa chỉ";
                     phone.Content = currentCitizen.Phone?.ToString() ?? "Không có số điện thoại";
                     mail.Content = currentCitizen.Mail ?? "Không có email";
+                    cancuoc.Content = currentCitizen.Id ?? "Không có căn cước";
                 }
                 else
                 {
@@ -70,6 +72,7 @@ namespace Project212
         {
             if (currentCitizen != null)
             {
+                
                 var vehicles = vehicleDAO.GetVehiclesByCitizenId(currentCitizen.Id);
                 this.dgVehicles.ItemsSource = vehicles;
             }
@@ -90,6 +93,7 @@ namespace Project212
                     tbDiachi.Text = currentCitizen.Address;
                     tbPhone.Text = currentCitizen.Phone;
                     tbMail.Text = currentCitizen.Mail;
+                    tbCancuoc.Text = currentCitizen.Id;
                 }
             }
 
@@ -103,14 +107,25 @@ namespace Project212
             tbPhone.IsEnabled = true;
             tbMail.IsEnabled = true;
 
-            if (currentCitizen != null)
+
+
+
+            if (currentCitizen == null || string.IsNullOrWhiteSpace(currentCitizen.Id) &&
+    string.IsNullOrWhiteSpace(currentCitizen.Name) &&
+    currentCitizen.Dob == null &&
+    string.IsNullOrWhiteSpace(currentCitizen.Address) &&
+    string.IsNullOrWhiteSpace(currentCitizen.Phone) &&
+    string.IsNullOrWhiteSpace(currentCitizen.Mail))
             {
-                btnUpdate.IsEnabled = true;
+                btnAdd.IsEnabled = true;
+                btnUpdate.IsEnabled = false;
             }
             else
             {
-                btnAdd.IsEnabled = true;
+                btnUpdate.IsEnabled = true;
+                btnAdd.IsEnabled = false;
             }
+
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)

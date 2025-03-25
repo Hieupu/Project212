@@ -21,11 +21,13 @@ public partial class Vehicle
 
     public DateOnly Dom { get; set; }
 
-    public string? CitizenId { get; set; }
+    public string CitizenId { get; set; } = null!;
 
     public int? Capacity { get; set; }
 
     public virtual Citizen Citizen { get; set; } = null!;
 
     public virtual ICollection<Record> Records { get; set; } = new List<Record>();
+
+    public virtual ICollection<Timetable> Timetables { get; set; } = new List<Timetable>();
 }

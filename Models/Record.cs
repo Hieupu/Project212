@@ -11,11 +11,11 @@ public partial class Record
 
     public bool Result { get; set; }
 
-    public double Co { get; set; }
+    public decimal Co { get; set; }
 
-    public double Hc { get; set; }
+    public decimal Hc { get; set; }
 
-    public double Nox { get; set; }
+    public decimal Nox { get; set; }
 
     public string Note { get; set; } = null!;
 
@@ -28,6 +28,4 @@ public partial class Record
     public virtual Timetable Time { get; set; } = null!;
 
     public virtual Vehicle Vehicle { get; set; } = null!;
-
-    public string ResultText => Result ? "Đạt" : "Không đạt";
 }

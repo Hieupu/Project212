@@ -5,7 +5,7 @@ namespace Project212.Models;
 
 public partial class Citizen
 {
-    public string? Id { get; set; }
+    public string Id { get; set; } = null!;
 
     public string? Name { get; set; }
 
@@ -13,7 +13,7 @@ public partial class Citizen
 
     public string? Address { get; set; }
 
-    public String? Phone { get; set; }
+    public string? Phone { get; set; }
 
     public string? Mail { get; set; }
 

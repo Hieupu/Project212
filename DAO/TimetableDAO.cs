@@ -42,13 +42,13 @@ namespace Project212.DAO
         //    }
         //}
 
-        public bool AddTimetable(int inspectionId, int accId, DateTime inspectTime)
+        public bool AddTimetable(int inspectionId, int accId, DateTime inspectTime, int vehicleId)
         {
             try
             {
                 // Kiểm tra xem đã có lịch trùng tại cùng một trạm và thời điểm hay chưa
                 bool isDuplicate = _context.Timetables      //Timetables đc khai báo trong database prn212assgi...
-                    .Any(t => t.InspectionId == inspectionId && t.InspectTime == inspectTime);
+                    .Any(t => t.InspectionId == inspectionId && t.InspectTime == inspectTime && t.VehicleId == vehicleId);
 
                 if (isDuplicate)
                 {
@@ -58,6 +58,7 @@ namespace Project212.DAO
 
                 var timetable = new Models.Timetable
                 {
+                    VehicleId = vehicleId,
                     InspectionId = inspectionId,
                     AccId = accId,
                     InspectTime = inspectTime,
