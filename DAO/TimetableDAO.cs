@@ -12,9 +12,9 @@ namespace Project212.DAO
     {
         private readonly Prn212AssignmentContext _context;
 
-        public TimetableDAO(Prn212AssignmentContext context)
+        public TimetableDAO()
         {
-            _context = context;
+            _context = new Prn212AssignmentContext();
         }
 
 
@@ -22,14 +22,13 @@ namespace Project212.DAO
         {
             try
             {
-                // Kiểm tra xem đã có lịch trùng tại cùng một trạm và thời điểm hay chưa
-                bool isDuplicate = _context.Timetables      //Timetables đc khai báo trong database prn212assgi...
-                    .Any(t => t.InspectionId == inspectionId && t.InspectTime == inspectTime && t.VehicleId == vehicleId);
+                bool isDuplicate = _context.Timetables     
+                    .Any(t => t.InspectionId == inspectionId && t.InspectTime == inspectTime);
 
                 if (isDuplicate)
                 {
                     Console.WriteLine("Lịch đã tồn tại vào thời điểm này!");
-                    return false; // Không cho phép đặt trùng lịch
+                    return false; 
                 }
 
                 var timetable = new Models.Timetable
@@ -57,7 +56,6 @@ namespace Project212.DAO
             }
         }
 
-
         public bool CancelTimetable(int stationId, int accId, DateTime inspectTime)
         {
             try
@@ -76,6 +74,17 @@ namespace Project212.DAO
                 Console.WriteLine($"Lỗi khi hủy lịch: {ex.Message}");
                 return false;
             }
+        }
+
+        public List<Models.Timetable> GetAllTimetables()
+        {
+            return _context.Timetables
+            .Include(t => t.Acc) 
+        .ThenInclude(a => a.Citizens) 
+        .Include(t => t.Vehicle) 
+    .Include(t => t.Inspection) 
+    .Include(t => t.Records) 
+    .ToList();
         }
     }
 }

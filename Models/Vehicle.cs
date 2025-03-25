@@ -30,4 +30,6 @@ public partial class Vehicle
     public virtual ICollection<Record> Records { get; set; } = new List<Record>();
 
     public virtual ICollection<Timetable> Timetables { get; set; } = new List<Timetable>();
+
+    public string FullInfo => $"{Brand.Trim()} {Model.Trim()} {Plate.Trim()}";
 }

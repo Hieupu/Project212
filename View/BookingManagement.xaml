@@ -8,6 +8,7 @@
             <RowDefinition Height="40" />
             <RowDefinition Height="40" />
             <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -15,24 +16,27 @@
                FontFamily="Segoe UI Black" Foreground="#18A5A7"
                HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-        
+
         <Label Grid.Row="1" Grid.Column="0" Content="ID" FontSize="15" VerticalAlignment="Center"/>
         <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtID" IsReadOnly="True" Width="150" Margin="5" Text="{Binding Path=Id, Mode=OneWay}"
                  DataContext="{Binding ElementName=dgBookings, Path=SelectedItem}"/>
 
-        
+
         <Label Grid.Row="2" Grid.Column="0" Content="Status" FontSize="15" VerticalAlignment="Center"/>
         <ComboBox Grid.Row="2" Grid.Column="1" x:Name="cbStatus" Width="150" Margin="5" SelectedItem="{Binding Path=Status , Mode=OneWay}"
                   DataContext="{Binding ElementName=dgBookings, Path=SelectedItem}">
             <ComboBoxItem Content="Duyệt"/>
             <ComboBoxItem Content="Hủy"/>
         </ComboBox>
+        <Label Grid.Row="4" Grid.Column="0" Content="Lọc theo cơ sở" FontSize="15" Margin="0,0,0,10"/>
 
-        
+        <ComboBox Grid.Row="4" x:Name="cbCoso" Width="170" SelectionChanged="cbCoso_SelectionChanged" Margin="30,5,30,10" />
+
+
         <Button Grid.Row="3" Grid.Column="2" Content="Lưu" Width="80" Margin="10" Click="btnSave_Click"/>
 
-        
-        <DataGrid Grid.Row="4" x:Name="dgBookings" AutoGenerateColumns="False"
+
+        <DataGrid Grid.Row="5" x:Name="dgBookings" AutoGenerateColumns="False"
                   IsReadOnly="True" SelectionMode="Single"
                   ItemsSource="{Binding Bookings}"
                   Margin="10" SelectionChanged="dgBookings_SelectionChanged">

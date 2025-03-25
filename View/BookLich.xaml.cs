@@ -34,7 +34,7 @@ namespace Project212
         {
             _context = new Prn212AssignmentContext();
             _currentUserId = UserSession.CurrentUser?.Id ?? -1;
-            _timetableDAO = new TimetableDAO(_context);
+            _timetableDAO = new TimetableDAO();
             vehicleDAO = new VehicleDAO();
             _vehicle = new Vehicle();
             InitializeComponent();
@@ -45,7 +45,6 @@ namespace Project212
             LoadVehicle();
         }
 
-        //Load cb trạm
         void LoadComboboxRoles()
         {
             var station = CosoDAO.GetInspectionStations();

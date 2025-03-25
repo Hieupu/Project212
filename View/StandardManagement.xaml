@@ -25,13 +25,7 @@
              DataContext="{Binding ElementName=lsProduct, Path=SelectedItem}"
                          Margin="0,0,0,5" />
             </StackPanel>
-            <StackPanel Orientation="Vertical">
-                <Label Content="Vehicle Type:" />
-                <TextBox x:Name="txtVihicle"
-                                      Text="{Binding Path=VehicleType, Mode=OneWay}"
-             DataContext="{Binding ElementName=lsProduct, Path=SelectedItem}"
-                         Margin="0,0,0,5" />
-            </StackPanel>
+
             <StackPanel Orientation="Vertical">
                 <Label Content="CO:" />
                 <TextBox x:Name="txtCo"
@@ -66,7 +60,6 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Path= Id}" Width="Auto"/>
-                    <GridViewColumn Header="VehicleType" DisplayMemberBinding="{Binding Path= VehicleType}" Width="Auto"/>
                     <GridViewColumn Header="Co" DisplayMemberBinding="{Binding Path= Co}" Width="Auto"/>
                     <GridViewColumn Header="Hc" DisplayMemberBinding="{Binding Path= Hc}" Width="Auto"/>
                     <GridViewColumn Header="Nox" DisplayMemberBinding="{Binding Path= Nox}" Width="Auto" />
