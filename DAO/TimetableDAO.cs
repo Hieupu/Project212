@@ -17,7 +17,32 @@ namespace Project212.DAO
             _context = new Prn212AssignmentContext();
         }
 
-        public bool AddTimetable(int inspectionId, int accId, DateTime inspectTime)
+        // đang sửa AddTimetable
+
+        //public bool AddTimetable(int inspectionId, int accId, DateTime inspectTime)
+        //{
+        //    try
+        //    {
+        //        var timetable = new Project212.Models.Timetable
+        //        {
+        //            InspectionId = inspectionId,
+        //            AccId = accId,
+        //            InspectTime = inspectTime,
+        //            Status = "Đang duyệt"
+        //        };
+
+        //        _context.Timetables.Add(timetable);
+        //        _context.SaveChanges();
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Lỗi khi đặt lịch: {ex.Message}");
+        //        return false;
+        //    }
+        //}
+
+        public bool AddTimetable(int inspectionId, int accId, DateTime inspectTime, int vehicleId)
         {
             try
             {
@@ -32,6 +57,7 @@ namespace Project212.DAO
 
                 var timetable = new Models.Timetable
                 {
+                    VehicleId = vehicleId,
                     InspectionId = inspectionId,
                     AccId = accId,
                     InspectTime = inspectTime,

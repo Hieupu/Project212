@@ -24,4 +24,5 @@ public partial class Timetable
     public int? VehicleId { get; set; }
 
     public virtual Vehicle? Vehicle { get; set; }
+    public virtual ICollection<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
 }
