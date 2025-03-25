@@ -125,7 +125,7 @@ namespace Project212
                 return;
             }
 
-            bool hasVehicle = _context.Vehicles.Any(v => v.Id == _currentUserId);
+            bool hasVehicle = _context.Vehicles.Any(v => v.Citizen.AccId == _currentUserId);
 
             if (!hasVehicle)
             {

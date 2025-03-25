@@ -43,19 +43,20 @@ namespace Project212.View
             try
             {
 
-                var rs = _context.Timetables.Where(x => x.Status.Trim().ToLower().Equals("đã duyệt"))
-                .Select(b => new RecordViewModel
-                {
-                    Id = b.Id,
-                    StationName = _context.InspectionStations.FirstOrDefault(x => x.Id == b.InspectionId).Name,
-                    User = _context.Citizens.FirstOrDefault(x => b.AccId.ToString() == x.Id).Name,
-                    AppointmentDate = b.InspectTime.ToString("yyyy-MM-dd HH:mm"),
-                    Status = b.Status,
-                    RecordStatus = _context.Records.Any(x => x.TimeId == b.Id)
-    ? (_context.Records.FirstOrDefault(x => x.TimeId == b.Id).Result == false ? "Chưa đạt" : "Đạt")
-    : "Chưa kiểm tra"
-                })
-                            .ToList();
+                var rs = _context.Timetables
+            .Where(x => x.Status.Trim().ToLower().Equals("đã duyệt"))
+            .Select(b => new RecordViewModel
+            {
+                Id = b.Id,
+                StationName = _context.InspectionStations.FirstOrDefault(x => x.Id == b.InspectionId).Name,
+                User = _context.Citizens.FirstOrDefault(x => x.AccId == b.AccId).Name,
+                AppointmentDate = b.InspectTime.ToString("yyyy-MM-dd HH:mm"),
+                Status = b.Status,
+                RecordStatus = _context.Records.Any(x => x.TimeId == b.Id)
+                    ? (_context.Records.FirstOrDefault(x => x.TimeId == b.Id).Result == false ? "Chưa đạt" : "Đạt")
+                    : "Chưa kiểm tra"
+            })
+            .ToList();
 
                 if (rs == null || !rs.Any())
                 {
