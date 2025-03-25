@@ -92,7 +92,7 @@ namespace Project212.View
                     Co = co,
                     Hc = hc,
                     Nox = nox,
-                    Date = DateTime.Now,
+                    Date = DateOnly.FromDateTime(DateTime.Now),
                 };
 
                 _context.Standards.Add(standard);
@@ -160,7 +160,7 @@ namespace Project212.View
                 standard.Hc = hc;
                 standard.Nox = nox;
                 standard.Co = co;
-                standard.Date = DateTime.Now;
+                standard.Date = DateOnly.FromDateTime(DateTime.Now);
 
                 _context.Standards.Update(standard);
                 _context.SaveChanges();
@@ -187,7 +187,7 @@ namespace Project212.View
 
             public double Nox { get; set; }
 
-            public DateTime Date { get; set; }
+            public DateOnly Date { get; set; }
         }
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)

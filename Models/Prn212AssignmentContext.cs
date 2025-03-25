@@ -42,7 +42,6 @@ public partial class Prn212AssignmentContext : DbContext
             optionsBuilder.UseSqlServer(congfig.GetConnectionString("DBContext"));
         }
     }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Account>(entity =>
@@ -186,9 +185,7 @@ public partial class Prn212AssignmentContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.Co).HasColumnName("CO");
-            entity.Property(e => e.Date)
-                .HasColumnType("datetime")
-                .HasColumnName("date");
+            entity.Property(e => e.Date).HasColumnName("date");
             entity.Property(e => e.Hc).HasColumnName("HC");
             entity.Property(e => e.Nox).HasColumnName("NOx");
         });

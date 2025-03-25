@@ -15,14 +15,13 @@ public partial class Timetable
 
     public string Status { get; set; } = null!;
 
+    public int? VehicleId { get; set; }
+
     public virtual Account Acc { get; set; } = null!;
 
     public virtual InspectionStation Inspection { get; set; } = null!;
 
     public virtual ICollection<Record> Records { get; set; } = new List<Record>();
 
-    public int? VehicleId { get; set; }
-
     public virtual Vehicle? Vehicle { get; set; }
-    public virtual ICollection<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
 }

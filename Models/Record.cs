@@ -10,6 +10,7 @@ public partial class Record
     public int VehicleId { get; set; }
 
     public bool Result { get; set; }
+
     public double Co { get; set; }
 
     public double Hc { get; set; }

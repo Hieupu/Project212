@@ -80,11 +80,11 @@ namespace Project212.DAO
         {
             return _context.Timetables
             .Include(t => t.Acc) 
-        .ThenInclude(a => a.Citizens) 
-        .Include(t => t.Vehicle) 
-    .Include(t => t.Inspection) 
-    .Include(t => t.Records) 
-    .ToList();
+            .ThenInclude(a => a.Citizens) 
+            .Include(t => t.Vehicle) 
+            .Include(t => t.Inspection) 
+            .Include(t => t.Records) 
+            .ToList();
         }
     }
 }
