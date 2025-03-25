@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,7 +28,8 @@ namespace Project212
         private readonly CitizenDAO citizenDAO;
         private Citizen currentCitizen;
         private Account currentAccount;
-        private readonly VehicleDAO vehicleDAO;
+        private VehicleDAO vehicleDAO;
+        
 
         public UserInformation()
         {
@@ -42,6 +44,7 @@ namespace Project212
             LoadUserInformation();
             LoadDataGridVehicle();
             LoadInforChinhSua();
+            CheckVehicleInspection();
         }
 
         private void LoadUserInformation()
@@ -87,8 +90,8 @@ namespace Project212
                 {
                     tbTen.Text = currentCitizen.Name;
                     dtNgaysinh.SelectedDate = currentCitizen.Dob.HasValue
-    ? currentCitizen.Dob.Value.ToDateTime(TimeOnly.MinValue)
-    : null;
+                    ? currentCitizen.Dob.Value.ToDateTime(TimeOnly.MinValue)
+                    : null;
 
                     tbDiachi.Text = currentCitizen.Address;
                     tbPhone.Text = currentCitizen.Phone;
@@ -111,11 +114,11 @@ namespace Project212
 
 
             if (currentCitizen == null || string.IsNullOrWhiteSpace(currentCitizen.Id) &&
-    string.IsNullOrWhiteSpace(currentCitizen.Name) &&
-    currentCitizen.Dob == null &&
-    string.IsNullOrWhiteSpace(currentCitizen.Address) &&
-    string.IsNullOrWhiteSpace(currentCitizen.Phone) &&
-    string.IsNullOrWhiteSpace(currentCitizen.Mail))
+                string.IsNullOrWhiteSpace(currentCitizen.Name) &&
+                currentCitizen.Dob == null &&
+                string.IsNullOrWhiteSpace(currentCitizen.Address) &&
+                string.IsNullOrWhiteSpace(currentCitizen.Phone) &&
+                string.IsNullOrWhiteSpace(currentCitizen.Mail))
             {
                 btnAdd.IsEnabled = true;
                 btnUpdate.IsEnabled = false;
@@ -161,6 +164,7 @@ namespace Project212
                 using (Prn212AssignmentContext context = new Prn212AssignmentContext())
                 {
                     context.Citizens.Add(newCitizen);
+
                     context.SaveChanges();
 
                     currentCitizen = newCitizen;
@@ -200,11 +204,41 @@ namespace Project212
                     return;
                 }
 
-                currentCitizen.Name = tbTen.Text;
+                // check name
+                string nameInput = tbTen.Text.Trim(); 
+
+
+                if (!Regex.IsMatch(nameInput, @"^[\p{L} ]+$"))
+                {
+                    MessageBox.Show("Tên chỉ được chứa chữ cái và khoảng trắng, không được có số hoặc ký tự đặc biệt!", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                currentCitizen.Name = nameInput;
+
                 currentCitizen.Dob = DateOnly.FromDateTime(dtNgaysinh.SelectedDate.Value);
                 currentCitizen.Address = tbDiachi.Text;
-                currentCitizen.Phone = tbPhone.Text ;
-                currentCitizen.Mail = tbMail.Text;
+                
+                //check phone
+                string phone = tbPhone.Text.Trim();
+                if (!Regex.IsMatch(phone, @"^0\d{9,10}$"))
+                {
+                    MessageBox.Show("Số điện thoại phải bắt đầu bằng 0, có từ 10 đến 11 chữ số, và không chứa ký tự đặc biệt!",
+                                    "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                currentCitizen.Phone = phone;
+
+                // check mail
+                string email = tbMail.Text.Trim();
+                if (!Regex.IsMatch(email, @"^[a-zA-Z0-9.]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"))
+                {
+                    MessageBox.Show("Email không hợp lệ! Vui lòng nhập đúng định dạng (ví dụ: example@gmail.com).",
+                                    "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                currentCitizen.Mail = email;
+
 
                 bool result = citizenDAO.UpdateCitizen(currentCitizen);
                 if (result)
@@ -234,5 +268,32 @@ namespace Project212
             tbMail.IsEnabled = false;
             btnUpdate.IsEnabled = false;
         }
+
+        private void CheckVehicleInspection()
+        {
+            if (currentCitizen != null)
+            {
+                var vehicles = vehicleDAO.GetVehiclesByCitizenId(currentCitizen.Id);
+                int currentYear = DateTime.Now.Year;
+
+                List<string> expiredVehicles = new List<string>();
+
+                foreach (var vehicle in vehicles)
+                {
+                    if (vehicle.Dom.Year <= currentYear - 5) // Kiểm tra nếu xe quá 5 năm
+                    {
+                        expiredVehicles.Add(vehicle.Plate); // Thêm biển số xe vào danh sách cảnh báo
+                    }
+                }
+
+                if (expiredVehicles.Count > 0)
+                {
+                    string message = "Các xe sau đã được sản xuất quá 5 năm, vui lòng đi kiểm định:\n" +
+                                     string.Join("\n", expiredVehicles);
+                    MessageBox.Show(message, "Cảnh báo kiểm định", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+        }
+
     }
 }

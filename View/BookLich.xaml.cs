@@ -25,7 +25,7 @@ namespace Project212
         private readonly TimetableDAO _timetableDAO;
         private readonly Prn212AssignmentContext _context;
         private DateTime _selectedInspectTime;
-        private int _selectedStationId; //id của "TRẠM KIỂM ĐỊNH"
+        private int _selectedStationId; 
         private int _currentUserId;
         private Vehicle _vehicle;
         private Citizen currentCitizen;
@@ -34,7 +34,6 @@ namespace Project212
         {
             _context = new Prn212AssignmentContext();
             _currentUserId = UserSession.CurrentUser?.Id ?? -1;
-            //MessageBox.Show($"Current User ID: {_currentUserId}");
             _timetableDAO = new TimetableDAO(_context);
             vehicleDAO = new VehicleDAO();
             _vehicle = new Vehicle();
@@ -46,22 +45,23 @@ namespace Project212
             LoadVehicle();
         }
 
-        //Load dữ liệu "TRẠM KIỂM ĐỊNH"
+        //Load cb trạm
         void LoadComboboxRoles()
         {
             var station = CosoDAO.GetInspectionStations();
             if (station != null && station.Count > 0)
             {
                 cbRoles1.ItemsSource = station;
-                cbRoles1.DisplayMemberPath = "Name"; // Hiển thị tên trạm
-                cbRoles1.SelectedValuePath = "Id";   // Giá trị thực nhận là Id
-                cbRoles1.SelectedIndex = 0;          // Chọn phần tử đầu tiên
+                cbRoles1.DisplayMemberPath = "Name"; 
+                cbRoles1.SelectedValuePath = "Id";   
+                cbRoles1.SelectedIndex = 0;          
             }
             else
             {
-                cbRoles1.ItemsSource = null; // Tránh lỗi khi danh sách rỗng
+                cbRoles1.ItemsSource = null; 
             }
         }
+        //load cb xe
         void LoadVehicle()
         {
             currentCitizen = _context.Citizens.FirstOrDefault(c => c.AccId == _currentUserId);
@@ -77,27 +77,28 @@ namespace Project212
             }
             else
             {
-                cbVehicle.ItemsSource = null; // Tránh lỗi khi danh sách rỗng
+                cbVehicle.ItemsSource = null; 
             }
         }
+
+        //load filter trạm
         void LoadComboboxCoso()
         {
             var stations = CosoDAO.GetInspectionStations();
             if (stations != null && stations.Count > 0)
             {
-                // Create a new list that includes an "All" option at the beginning
+                
                 var allStations = new List<dynamic>();
 
-                // Add an "All" option with ID -1 (or any value that doesn't conflict with your actual IDs)
+                // thêm "tất cả" có id= -1, tránh xung đột id
                 allStations.Add(new { Id = -1, Name = "Tất cả" });
 
-                // Add all the actual stations
                 allStations.AddRange(stations);
 
                 cbCoso.ItemsSource = allStations;
                 cbCoso.DisplayMemberPath = "Name";
                 cbCoso.SelectedValuePath = "Id";
-                cbCoso.SelectedIndex = 0; // Select "All" by default
+                cbCoso.SelectedIndex = 0; 
             }
             else
             {
@@ -117,9 +118,8 @@ namespace Project212
 
             int vehicleId = (int)cbVehicle.SelectedValue;
             int inspectionId = (int)cbRoles1.SelectedValue;
-            DateTime gioihan = dpThoigian.SelectedDate.Value;
+            DateTime gioihan = dpThoigian.SelectedDate.Value;       // ngày đc chọn
 
-            // Kiểm tra nếu ngày được chọn nhỏ hơn ngày hiện tại
             if (gioihan < DateTime.Today)
             {
                 MessageBox.Show("Không thể đặt lịch trong quá khứ. Vui lòng chọn ngày hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -163,9 +163,8 @@ namespace Project212
                 _currentUserId = userId;
             }
 
-            // Use .Include() to eagerly load the Vehicle navigation property
             dgVehiclesLichsu.ItemsSource = _context.Timetables
-                .Include(t => t.Vehicle) // Include the Vehicle data
+                .Include(t => t.Vehicle) 
                 .Where(t => t.AccId == _currentUserId)
                 .Select(t => new
                 {
@@ -183,24 +182,20 @@ namespace Project212
                 // Get the current user ID
                 int userId = UserSession.CurrentUser?.Id ?? -1;
 
-                // Start with the base query for the current user
                 var query = _context.Timetables.Where(t => t.AccId == _currentUserId);
 
-                // Apply station filter if selected (and not "All")
                 if (cbCoso.SelectedValue != null && cbCoso.SelectedIndex > 0) // Assuming index 0 is "All"
                 {
                     int selectedStationId = (int)cbCoso.SelectedValue;
                     query = query.Where(t => t.InspectionId == selectedStationId);
                 }
 
-                // Apply date filter if selected
                 if (txtSearch.SelectedDate != null)
                 {
                     DateTime selectedDate = txtSearch.SelectedDate.Value.Date;
                     query = query.Where(t => t.InspectTime.Date == selectedDate);
                 }
 
-                // Execute the query and update the DataGrid
                 dgVehiclesLichsu.ItemsSource = query
                     .Select(t => new
                     {
@@ -218,7 +213,7 @@ namespace Project212
         }
 
 
-
+        //check cancel lịch
         private void dgVehiclesLichsu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (dgVehiclesLichsu.SelectedItem != null)
@@ -233,7 +228,7 @@ namespace Project212
                     .Cast<ComboBoxItem>()
                     .FirstOrDefault(i => i.Content.ToString() == _selectedInspectTime.Hour.ToString("00"));
 
-                btnHuylich.IsEnabled = !(selectedStatus.Trim() == "Đã hủy" || selectedStatus.Trim() == "Đã duyệt");
+                btnHuylich.IsEnabled = !(selectedStatus.Trim() == "Đã hủy" || selectedStatus.Trim() == "Đã Duyệt");
 
             }
             else
@@ -249,6 +244,17 @@ namespace Project212
             if (_selectedInspectTime == default || _selectedStationId == 0)
             {
                 MessageBox.Show("Vui lòng chọn một lịch cần hủy!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            MessageBoxResult confirmResult = MessageBox.Show(
+                "Bạn có chắc chắn muốn hủy lịch này không?",
+                "Xác nhận hủy lịch",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (confirmResult == MessageBoxResult.No)
+            {
                 return;
             }
 
