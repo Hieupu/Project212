@@ -116,14 +116,6 @@ namespace Project212
             ContainerUser.Child = userInfo;
         }
 
-        private void ManageTimeable_Click(object sender, RoutedEventArgs e)
-        {
-            Timetable timetableControl = new Timetable();
-            timetableControl.Width = ContainerAdmin.ActualWidth;
-            timetableControl.Height = ContainerAdmin.ActualHeight;
-            ContainerAdmin.Child = timetableControl; 
-        }
-
         private void ViewVehicleList_Click(object sender, RoutedEventArgs e) { 
             PoliceView policeView = new PoliceView();
             policeView.Width = ContainerPolice.ActualWidth;
@@ -176,6 +168,23 @@ namespace Project212
             ContainerEngineer.Child = standardManagement;
         }
 
+        private void BookingHistory_Click(object sender, RoutedEventArgs e)
+        {
+            BookingHistory bookingHistory = new BookingHistory();
+            bookingHistory.Width = ContainerAdmin.ActualWidth;
+            bookingHistory.Height = ContainerAdmin.ActualHeight;
+
+            ContainerAdmin.Child = bookingHistory;
+        }
+
+        private void Setting_Click(object sender, RoutedEventArgs e)
+        {
+            //Setting setting = new Setting();
+            //setting.Width = ContainerAdmin.ActualWidth;
+            //setting.Height = ContainerAdmin.ActualHeight;
+
+            //ContainerAdmin.Child = setting;
+        }
         private void ButLogOut_Click(object sender, RoutedEventArgs e)
         {
             UserSession.CurrentUser = null; // Xoá phiên đăng nhập

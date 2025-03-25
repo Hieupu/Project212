@@ -28,4 +28,6 @@ public partial class Vehicle
     public virtual Citizen Citizen { get; set; } = null!;
 
     public virtual ICollection<Record> Records { get; set; } = new List<Record>();
+
+    public string FullInfo => $"{Brand.Trim()} {Model.Trim()} {Plate.Trim()}";
 }

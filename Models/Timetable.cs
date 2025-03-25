@@ -20,4 +20,8 @@ public partial class Timetable
     public virtual InspectionStation Inspection { get; set; } = null!;
 
     public virtual ICollection<Record> Records { get; set; } = new List<Record>();
+
+    public int? VehicleId { get; set; }
+
+    public virtual Vehicle? Vehicle { get; set; }
 }

@@ -25,14 +25,13 @@ namespace Project212
         private readonly TimetableDAO _timetableDAO;
         private readonly Prn212AssignmentContext _context;
         private DateTime _selectedInspectTime;
-        private int _selectedStationId; //id của "TRẠM KIỂM ĐỊNH"
+        private int _selectedStationId;
         private int _currentUserId;
         public BookLich()
         {
             _context = new Prn212AssignmentContext();
             _currentUserId = UserSession.CurrentUser?.Id ?? -1;
-            //MessageBox.Show($"Current User ID: {_currentUserId}");
-            _timetableDAO = new TimetableDAO(_context);
+            _timetableDAO = new TimetableDAO();
             InitializeComponent();
             LoadComboboxRoles();
             LoadTimetableHistory();
@@ -40,7 +39,6 @@ namespace Project212
             FilterTimetableHistory();
         }
 
-        //Load dữ liệu "TRẠM KIỂM ĐỊNH"
         void LoadComboboxRoles()
         {
             var station = CosoDAO.GetInspectionStations();
