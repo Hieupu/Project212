@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using Project212.Models;
-using System.IO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
-using Microsoft.Win32;
 
 
 namespace Project212
@@ -34,7 +28,6 @@ namespace Project212
             LoadDatagridResult();
         }
 
-        //load thông báo chung
         private void LoadNotifications()
         {
             try
@@ -59,7 +52,6 @@ namespace Project212
                 tbDetail.Text = selectedNotice.Detail;
                 tbSentDate.Text = selectedNotice.SentDate.ToString("dd/MM/yyyy HH:mm");
 
-                // Nếu thông báo chưa đọc, cập nhật thành đã đọc
                 if (!selectedNotice.IsRead)
                 {
                     selectedNotice.IsRead = true;
@@ -131,10 +123,8 @@ namespace Project212
                 {
                     using StreamWriter sw = new StreamWriter(filePath);
 
-                    // Lấy bản ghi đã chọn
                     dynamic selectedItem = DgResult.SelectedItem;
 
-                    // Ghi thông tin bản ghi được chọn ra file
                     sw.WriteLine($"Kết quả: {selectedItem.Result}\nCO: {selectedItem.Co}\nHC: {selectedItem.Hc}\nNOx: {selectedItem.Nox}\nGhi chú: {selectedItem.Note}");
 
                     MessageBox.Show($"Exported Selected Record to {filePath}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);

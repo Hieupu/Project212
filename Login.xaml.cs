@@ -46,27 +46,7 @@ namespace Project212
         {
             string username = UsernameTextBox.Text;
             string password = PasswordBox.Password;
-
-            if (isRegisterMode)
-            {
-                string CitizenID = CitizenIDBox.Text;
-
-                if (context.Accounts.Any(a => a.Username == username))
-                {
-                    MessageBox.Show("Username already exists!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-
-                var newAccount = new Account { Username = username, Password = password, Role = "customer" };
-                context.Accounts.Add(newAccount);
-                context.SaveChanges();
-
-                var newCitizen = new Citizen { AccId = newAccount.Id, Id = CitizenID };
-                context.Citizens.Add(newCitizen);
-                context.SaveChanges();
-                MessageBox.Show("Registration successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
+            
 
             if (username.Length < 2 || username.Length > 10)
             {
@@ -93,6 +73,36 @@ namespace Project212
                 return;
             }
 
+            if (isRegisterMode)
+            {
+                string CitizenID = CitizenIDBox.Text;
+
+                if (context.Accounts.Any(a => a.Username == username))
+                {
+                    MessageBox.Show("Username already exists!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (CitizenID.Length != 12 || !CitizenID.All(char.IsDigit))
+                {
+                    MessageBox.Show("Invalid CitizenID! It must be exactly 12 digits.");
+                    return;
+                }
+
+
+                var newAccount = new Account { Username = username, Password = password, Role = "customer" };
+                context.Accounts.Add(newAccount);
+                context.SaveChanges();
+
+                var newCitizen = new Citizen { AccId = newAccount.Id, Id = CitizenID };
+                context.Citizens.Add(newCitizen);
+                context.SaveChanges();
+                MessageBox.Show("Registration successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            
+
             var account = context.Accounts
                                  .FirstOrDefault(a => a.Username == username && a.Password == password);
 
@@ -113,8 +123,8 @@ namespace Project212
 
                 if (attemptCount >= maxAttempts)
                 {
-                    lockoutEndTime = DateTime.Now.AddMinutes(5); 
-                    MessageBox.Show("Too many failed login attempts. Your account is locked for 5 minutes.");
+                    lockoutEndTime = DateTime.Now.AddMinutes(1); 
+                    MessageBox.Show("Too many failed login attempts. Your account is locked for 1 minutes.");
                 }
                 else
                 {

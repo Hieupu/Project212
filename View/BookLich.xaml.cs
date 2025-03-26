@@ -117,7 +117,7 @@ namespace Project212
 
             int vehicleId = (int)cbVehicle.SelectedValue;
             int inspectionId = (int)cbRoles1.SelectedValue;
-            DateTime gioihan = dpThoigian.SelectedDate.Value;       // ngày đc chọn
+            DateTime gioihan = dpThoigian.SelectedDate.Value;
 
             if (gioihan < DateTime.Today)
             {
